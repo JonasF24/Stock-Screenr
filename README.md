@@ -123,4 +123,4 @@ This tool is for informational and research purposes only. Nothing displayed her
 
 ---
 
-*Stock Screenr · Made by Jonas Flynn*
+*Stock Screenr · Made by Jonas F*
