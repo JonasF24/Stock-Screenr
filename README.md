@@ -1,8 +1,7 @@
-# Personal Screener
+# Stock Screenr
 
 A live, browser-based stock research dashboard built for identifying high-quality investment opportunities across three distinct strategies. Data is sourced in real time via the Finnhub.io API.
 
-**Made by Jonas Flynn**
 
 ---
 
@@ -18,9 +17,7 @@ Personal Screener is a single HTML file that runs entirely in your browser. It p
 - **Live quotes** via Finnhub REST API with WebSocket real-time tick updates
 - **Earnings-verified screening** — criteria checked against actual reported figures, not estimates
 - **Insights panel** — per-stock investment thesis and risk factors on every passing name
-- **Near-miss tables** — top 15 stocks that came closest to passing, with per-criterion breakdown
 - **Post-Market News Feed** — auto-fetches headlines for any selected stock after 4:00 PM ET daily
-- **Dark / Light mode** — toggle in the top right, preference saved across sessions
 - **Dual clocks** — local time and US Eastern Time displayed simultaneously
 - **ETF price strip** — live quotes for SCHD, SPY, VOO, and VTI as market benchmarks
 
@@ -42,7 +39,6 @@ Targets businesses with consistent, above-average growth trading at a low price 
 | Free Cash Flow (TTM) | > 0 |
 | PEG Ratio (5Y Exp-Mean) | > 0 and < 1 |
 
-**Passing stocks (as of March 2026):** NVDA, AVGO, MRVL, META
 
 ---
 
@@ -60,7 +56,6 @@ Classic value-compounder criteria inspired by fundamental quality investing. Tar
 | Dividend Yield | > 0% |
 | Revenue Growth (5Y) | > 20% |
 
-**Passing stocks (as of March 2026):** TRV, GD, CSCO
 
 ---
 
@@ -78,7 +73,6 @@ Targets top-500 US companies by market cap that combine strong, consistent divid
 | Free Cash Flow (TTM) | > 0 |
 | Payout Ratio | < 70% |
 
-**Passing stocks (as of March 2026, ranked by yield):** QCOM, ADP, FAST, ACN, UNH
 
 ---
 
@@ -129,4 +123,4 @@ This tool is for informational and research purposes only. Nothing displayed her
 
 ---
 
-*Personal Screener · Made by Jonas Flynn*
+*Stock Screenr · Made by Jonas Flynn*
