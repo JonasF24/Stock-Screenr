@@ -387,7 +387,7 @@ footer{border-top:1px solid var(--border);padding-top:.9rem;margin-top:1.5rem;fo
       <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Mkt Cap $500M–$15B</span>
     </div>
     <div class="sec-inner">
-      <div style="font-size:.59rem;color:var(--sub);margin-bottom:.75rem">✓ 5 stocks pass all 7 criteria · Severely undervalued per-share price with strong multi-year growth momentum · Criteria designed for lower-risk tolerance · click any card for insights</div>
+      <div style="font-size:.59rem;color:var(--sub);margin-bottom:.75rem">✓ 5 stocks pass all 7 criteria · Low share price (&lt;$25) with modest P/S and strong multi-year growth momentum · Criteria designed for lower-risk tolerance · click any card for insights</div>
       <div class="pg" id="mil-pg"></div>
       <div class="det" id="mil-det">
         <div class="dh"><div><div class="dsym" id="mil-sym">—</div><div class="dname" id="mil-nm">—</div></div><div class="dpb"><div class="dpr" id="mil-pr">—</div><div class="dchg" id="mil-ch">—</div><div class="dohlc" id="mil-oh">—</div></div></div>
@@ -424,7 +424,7 @@ footer{border-top:1px solid var(--border);padding-top:.9rem;margin-top:1.5rem;fo
         <span style="color:var(--accent)">⬡ Low Risk Value</span> &nbsp;·&nbsp;
         <span style="color:var(--gold)">◈ Buffett</span> &nbsp;·&nbsp;
         <span style="color:var(--div-col)">◆ Dividend</span> &nbsp;·&nbsp;
-        <span style="color:var(--mil)">▲ Deep Value</span>
+        <span style="color:var(--mil)">▲ Deep Value + High Growth</span>
       </div>
       <div class="ticker-select-grid" id="pmn-pills"></div>
       <div id="pmn-feed"><div style="font-size:.63rem;color:var(--muted);padding:.5rem 0">Select a ticker above to load post-market headlines. Auto-fetches daily after 4:00 PM ET.</div></div>
@@ -433,7 +433,7 @@ footer{border-top:1px solid var(--border);padding-top:.9rem;margin-top:1.5rem;fo
 </div>
 
 <footer>
-  <span>Data: Finnhub.io · Low Risk Value · Buffett · Dividend Growth · Deep Value Growth · March 2026</span>
+  <span>Data: Finnhub.io · Low Risk Value · Buffett · Dividend Growth · Deep Value + High Growth · March 2026</span>
   <span>For informational purposes only · Not financial advice · Made by Jonas Flynn</span>
 </footer>
 </div>
@@ -536,7 +536,7 @@ const DIV_PASS=[
    ins:[{icon:'✓',t:'Q2 FY26: record bookings $22.1B (41 clients with >$100M quarter) — raised full-year revenue guidance; 10% dividend increase signals management confidence'},{icon:'✓',t:'Lowest payout ratio in the screen at 38% with 15% dividend CAGR — best combination of growth safety and headroom for future raises'},{icon:'⚠',t:'Revenue growth 4% in local currency (8% USD) — solid but slower than peak; US Federal government business declining as DOGE cuts bite'},{icon:'✓',t:'85,000+ AI and data professionals; $5B in planned FY26 acquisitions including AI-native capabilities — implementation layer for enterprise AI'},{icon:'⚠',t:'Stock down ~38% from 52-week high on investor concern about DOGE-driven federal IT budget cuts — creates potential re-rating opportunity'}]},
 ];
 
-// ── DIVIDEND NEAR-MISSES (15) ──
+// ── DIVIDEND NEAR-MISSES (16) ──
 const DIV_FAIL=[
   {sym:'UNH', name:'UnitedHealth Group',dy:'✗ ~2.4%',dg:'✓ 14% CAGR',r5:'✓ +56%',roe:'✗ Declining',de:'✓ ~0.70',fcf:'✓ Pos',po:'✓ ~27%',f:['EPS -65% Q4 2025 YoY','Rev DECLINING in 2026 (first in 40yr)','DOJ criminal/civil investigation','ROE deteriorating rapidly']},
   {sym:'AVGO',name:'Broadcom',       dy:'✗ 0.81%',dg:'✓ 12% CAGR',r5:'✓ >20%',roe:'✓ 33%',de:'✓ 0.83',fcf:'✓ Pos',po:'✓ 46%',f:['Yield 0.81% (<1.5%)']},
@@ -649,6 +649,7 @@ async function openDetail(sym,sec){
 
 // ── DEEP VALUE + HIGH GROWTH PASSES ──
 // Criteria: Shr Price <$25 | Rev Gr 5Y >80% | Rev Gr 1Y >15% | P/S <6 | Gross Margin >35% | D/E <0.75 | Mkt Cap $500M–$15B
+// Note: MIL_PASS/MIL_FAIL/mil-* identifiers are intentionally retained for backwards compatibility with all existing DOM, style, and JS references in this file.
 const MIL_PASS=[
   {sym:'SOFI',name:'SoFi Technologies',ear:'Q4 2025 · Jan 27 2026',
    mktCap:'~$14.2B',sharePrice:'$13.50',
