@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Screener</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── DARK MODE (default) ── */
+:root{
+  --bg:#040f14;--s1:#071820;--s2:#0c2430;--s3:#102a38;--border:#0e3446;--border2:#165066;
+  --accent:#00e87a;--cyan:#00c8ff;--gold:#f59e0b;--div-col:#818cf8;--mil:#f97316;
+  --text:#d6f4ff;--muted:#6ab0c5;--sub:#9ad0de;
+  --green:#00e87a;--red:#ff6b6b;--amber:#fbbf24;
+  --adim:rgba(0,232,122,.1);--glow-g:rgba(0,232,122,.35);--glow-b:rgba(0,200,255,.35);
+  --hdr-bg:linear-gradient(135deg,#040f14 0%,#071c28 100%);
+}
+/* ── LIGHT MODE ── */
+body.light{
+  --bg:#f0f7fb;--s1:#ffffff;--s2:#e6f3f9;--s3:#d4eaf4;--border:#b8d8e8;--border2:#8cbdd0;
+  --accent:#007a3d;--cyan:#005f8a;--gold:#b45309;--div-col:#4338ca;--mil:#c2410c;
+  --text:#082330;--muted:#2d6b82;--sub:#3a7a91;
+  --green:#007a3d;--red:#cc2222;--amber:#9a5a00;
+  --adim:rgba(0,122,61,.1);--glow-g:transparent;--glow-b:transparent;
+  --hdr-bg:linear-gradient(135deg,#e8f4fb 0%,#d4ecf7 100%);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;transition:background .25s,color .25s}
+
+/* Grid overlay */
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,200,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(0,232,122,.018) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;z-index:0}
+body.light::before{background-image:linear-gradient(rgba(0,95,138,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,122,61,.05) 1px,transparent 1px)}
+
+.page{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:1.6rem}
+
+/* ── HEADER ── */
+header{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:1.2rem;border-bottom:1px solid var(--border);margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;background:var(--hdr-bg);margin:-1.6rem -1.6rem 1.5rem;padding:1.6rem 1.6rem 1.2rem}
+.logo-tag{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:.35rem;text-shadow:0 0 12px var(--glow-g)}
+h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;line-height:1;letter-spacing:-.02em}
+h1 em{color:var(--accent);font-style:normal;text-shadow:0 0 20px var(--glow-g)}
+.hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:.5rem}
+.clocks{display:flex;gap:1rem;align-items:center}
+.clock-block{display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.clock-label{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.clock-val{font-size:.82rem;color:var(--cyan);font-weight:500;text-shadow:0 0 8px var(--glow-b)}
+.clock-div{width:1px;height:28px;background:var(--border2);margin:0 .25rem}
+.hdr-btns{display:flex;gap:.5rem;align-items:center}
+
+/* BUTTONS */
+.btn{background:transparent;border:1px solid var(--border2);color:var(--sub);font-family:'DM Mono',monospace;font-size:.72rem;padding:.38rem .9rem;cursor:pointer;letter-spacing:.06em;transition:all .18s;border-radius:3px}
+.btn:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 0 8px var(--glow-g)}
+.btn.hi{border-color:var(--accent);color:var(--accent);box-shadow:0 0 6px var(--glow-g)}
+.btn.hi:hover{background:var(--adim)}
+#mode-btn{font-size:.68rem;padding:.35rem .8rem;letter-spacing:.1em;text-transform:uppercase;min-width:64px;text-align:center}
+
+/* ── STATUS BAR ── */
+.sbar{display:flex;align-items:center;gap:1.4rem;padding:.65rem 1.1rem;background:var(--s1);border:1px solid var(--border);margin-bottom:1.2rem;font-size:.72rem;flex-wrap:wrap;border-radius:4px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:7px;flex-shrink:0;vertical-align:middle}
+.dp{background:var(--green);animation:pulse 2s infinite;box-shadow:0 0 7px var(--glow-g)}
+.dr{background:var(--red)}.da{background:var(--amber)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.si{color:var(--sub)}.si strong{color:var(--text)}.sep{color:var(--border2);font-size:.65rem}
+#s-mkt.open{color:var(--green);text-shadow:0 0 8px var(--glow-g)}
+#s-mkt.closed{color:var(--red)}
+#s-mkt.unk{color:var(--amber)}
+
+/* BANNER */
+#banner{display:none;border:1px solid rgba(255,107,107,.35);background:rgba(255,107,107,.07);padding:.9rem 1.2rem;margin-bottom:1.3rem;font-size:.75rem;color:var(--red);line-height:1.9;border-radius:4px}
+#banner code{background:rgba(255,255,255,.1);padding:2px 6px;border-radius:3px}
+#banner a{color:var(--red)}
+#banner.ok{border-color:rgba(0,232,122,.35);background:rgba(0,232,122,.07);color:var(--green)}
+
+/* ── ETF STRIP ── */
+.ix-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1.5rem;border-radius:5px;overflow:hidden}
+.ix{background:var(--s1);padding:.85rem 1rem;transition:background .12s}
+.ix-sym{font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;color:var(--sub);margin-bottom:.25rem;letter-spacing:.06em}
+.ix-p{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;color:var(--text)}
+.ix-c{font-size:.7rem;margin-top:.18rem}
+.ix-tag{font-size:.55rem;color:var(--muted);letter-spacing:.04em;font-weight:400}
+
+/* ── COLLAPSIBLE SECTIONS ── */
+.sec-wrap{margin-bottom:1.5rem;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.sec-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:.95rem 1.2rem;background:var(--s1);cursor:pointer;transition:background .14s;user-select:none;border:none;color:inherit;font-family:'DM Mono',monospace;text-align:left}
+.sec-toggle:hover{background:var(--s2)}
+.lrv-tog{border-left:4px solid var(--accent)}.buf-tog{border-left:4px solid var(--gold)}.div-tog{border-left:4px solid var(--div-col)}.mil-tog{border-left:4px solid var(--mil)}.pmn-tog{border-left:4px solid var(--cyan)}
+.tl{display:flex;align-items:center;gap:1rem}
+.ti{font-size:.85rem;color:var(--sub)}
+.tt{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.04em}
+.lrv-tog .tt{color:var(--accent);text-shadow:0 0 10px var(--glow-g)}
+.buf-tog .tt{color:var(--gold)}
+.div-tog .tt{color:var(--div-col)}
+.mil-tog .tt{color:var(--mil);text-shadow:0 0 10px rgba(249,115,22,.3)}
+.pmn-tog .tt{color:var(--cyan);text-shadow:0 0 10px var(--glow-b)}
+/* WEEKLY REVIEW */
+.review-banner{display:flex;align-items:center;gap:.75rem;padding:.6rem 1.2rem;background:rgba(249,115,22,.07);border-bottom:1px solid rgba(249,115,22,.25);font-size:.68rem;flex-wrap:wrap}
+.review-banner.ok{background:rgba(0,232,122,.05);border-color:rgba(0,232,122,.2)}
+.rb-dot{width:7px;height:7px;border-radius:50%;background:var(--mil);flex-shrink:0;animation:pulse 2s infinite;box-shadow:0 0 6px rgba(249,115,22,.5)}
+.rb-dot-ok{background:var(--green);box-shadow:0 0 6px var(--glow-g)}
+.rb-txt{color:var(--text)}.rb-date{color:var(--sub);font-size:.62rem}
+.earnings-badge{display:inline-block;font-size:.5rem;padding:1px 5px;border-radius:2px;letter-spacing:.08em;text-transform:uppercase;margin-left:4px;vertical-align:middle}
+.eb-soon{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.3)}
+.eb-recent{background:rgba(0,200,255,.1);color:var(--cyan);border:1px solid rgba(0,200,255,.25)}
+.mil-badge{border-color:var(--mil);color:var(--mil)}
+.mil-pc.sel::before{background:var(--mil);box-shadow:0 0 8px rgba(249,115,22,.4)}
+.mil-nh{color:var(--mil)}
+.review-btn{background:transparent;border:1px solid rgba(249,115,22,.4);color:var(--mil);font-family:'DM Mono',monospace;font-size:.62rem;padding:.28rem .7rem;cursor:pointer;border-radius:3px;transition:all .15s;margin-left:auto}
+.review-btn:hover{background:rgba(249,115,22,.1)}
+.tm{font-size:.67rem;color:var(--sub);margin-top:.18rem;line-height:1.5}
+.ta{font-size:.8rem;color:var(--sub);transition:transform .22s;flex-shrink:0}
+.ta.open{transform:rotate(180deg)}
+.sec-body{display:none}.sec-body.open{display:block}
+.sec-inner{padding:1.2rem}
+
+/* ── CRITERIA PILLS ── */
+.crit-bar{display:flex;flex-wrap:wrap;gap:.45rem;padding:.7rem 1.2rem;background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:1.1rem}
+.crit{font-size:.64rem;padding:3px 8px;border-radius:3px;border:1px solid;font-weight:500}
+.ca{border-color:rgba(0,232,122,.35);color:var(--accent);background:rgba(0,232,122,.06)}
+.cb{border-color:rgba(245,158,11,.35);color:var(--gold);background:rgba(245,158,11,.07)}
+.cd{border-color:rgba(129,140,248,.35);color:var(--div-col);background:rgba(129,140,248,.07)}
+
+/* ── PASS CARDS ── */
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1.3rem;border-radius:4px;overflow:hidden}
+.pc{background:var(--s1);padding:1.1rem;cursor:pointer;transition:background .14s,box-shadow .14s;position:relative;overflow:hidden}
+.pc:hover{background:var(--s2)}.pc.sel{background:var(--s2)}
+.pc.sel::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.lrv-pc.sel::before{background:var(--accent);box-shadow:0 0 8px var(--glow-g)}
+.buf-pc.sel::before{background:var(--gold)}
+.div-pc.sel::before{background:var(--div-col)}
+.badge{display:inline-block;font-size:.57rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border:1px solid;margin-bottom:.6rem;border-radius:3px}
+.lrv-badge{border-color:var(--accent);color:var(--accent)}.buf-badge{border-color:var(--gold);color:var(--gold)}.div-badge{border-color:var(--div-col);color:var(--div-col)}
+.pc-sym{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;margin-bottom:.12rem;color:var(--text)}
+.pc-name{font-size:.68rem;color:var(--sub);margin-bottom:.65rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pc-price{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:.12rem;min-height:1.5rem;color:var(--text)}
+.pc-chg{font-size:.73rem;margin-bottom:.8rem;min-height:.9rem}
+.pc-mets{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px}
+.pm{font-size:.63rem}.pml{color:var(--sub)}
+.checks{margin-top:.75rem;display:flex;flex-direction:column;gap:4px}
+.ck{font-size:.62rem;display:flex;align-items:center;gap:6px}
+
+/* ── DETAIL PANEL ── */
+.det{display:none;background:var(--s1);border:1px solid var(--border);margin-bottom:1.2rem;animation:sli .2s ease;border-radius:5px;overflow:hidden}
+.det.vis{display:block}
+@keyframes sli{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.dh{display:flex;align-items:flex-start;justify-content:space-between;padding:1.1rem 1.4rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.8rem}
+.dsym{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--text)}
+.dname{font-size:.7rem;color:var(--sub);margin-top:.2rem}
+.dpb{text-align:right}.dpr{font-family:'Syne',sans-serif;font-size:1.85rem;font-weight:700;color:var(--text)}
+.dchg{font-size:.75rem;margin-top:.2rem}.dohlc{font-size:.65rem;color:var(--sub);margin-top:.22rem}
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:1px;background:var(--border)}
+.mc{background:var(--bg);padding:.65rem .9rem}
+.ml{font-size:.58rem;color:var(--sub);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.28rem}
+.mv{font-size:.88rem;color:var(--text)}
+
+/* INSIGHTS */
+.insights{padding:1rem 1.4rem;border-top:1px solid var(--border)}
+.ins-head{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.7rem}
+.ins-row{display:flex;align-items:flex-start;gap:.8rem;margin-bottom:.5rem}
+.ins-icon{font-size:.72rem;flex-shrink:0;width:16px}
+.ins-text{font-size:.72rem;color:var(--text);line-height:1.55}
+
+/* NEWS */
+.nw{padding:.9rem 1.4rem;border-top:1px solid var(--border)}
+.nh{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.7rem}
+.lrv-nh{color:var(--accent)}.buf-nh{color:var(--gold)}.div-nh{color:var(--div-col)}
+.ni{display:flex;gap:.7rem;padding:.55rem 0;border-bottom:1px solid var(--border);align-items:flex-start}.ni:last-child{border-bottom:none}
+.nt{font-size:.62rem;color:var(--sub);white-space:nowrap;min-width:68px;padding-top:2px}
+.na{font-size:.72rem;color:var(--text);text-decoration:none;display:block;line-height:1.55}
+.na:hover{color:var(--cyan)}
+.ns{font-size:.61rem;color:var(--sub);margin-top:.12rem}
+
+/* FAIL TABLE */
+.fl{font-family:'Syne',sans-serif;font-size:.63rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--sub);margin-bottom:.65rem;margin-top:1rem;padding-top:.9rem;border-top:1px solid var(--border)}
+.ft{width:100%;border-collapse:collapse;font-size:.69rem}
+.ft th{background:var(--s1);border:1px solid var(--border);padding:.5rem .75rem;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);font-weight:500;text-align:left}
+.ft td{border:1px solid var(--border);padding:.45rem .75rem;vertical-align:middle;color:var(--text)}
+.ft tr{background:var(--bg)}.ft tr:hover td{background:var(--s1)}
+.fsym{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;color:var(--text)}
+.fname{font-size:.62rem;color:var(--sub);display:block;margin-top:2px}
+.bf{display:inline-block;font-size:.56rem;padding:2px 6px;border-radius:3px;background:rgba(255,107,107,.12);color:var(--red);border:1px solid rgba(255,107,107,.28);white-space:nowrap;margin:1px}
+.vo{color:var(--green)}.vb{color:var(--red)}.vn{color:var(--sub)}
+
+/* DIVIDEND RANK */
+.rank-badge{display:inline-block;font-size:.58rem;padding:2px 7px;border:1px solid rgba(129,140,248,.45);color:var(--div-col);background:rgba(129,140,248,.09);border-radius:3px;margin-bottom:.45rem}
+.yield-big{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;color:var(--div-col);margin-bottom:.14rem}
+
+/* POST-MARKET NEWS */
+.pmn-status{font-size:.67rem;color:var(--sub);margin-bottom:.9rem;display:flex;align-items:center;gap:.65rem;flex-wrap:wrap}
+.pmn-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
+.pmn-live{background:var(--cyan);box-shadow:0 0 7px var(--glow-b);animation:pulse 2s infinite}
+.pmn-sched{background:var(--amber)}.pmn-off{background:var(--muted)}
+.ticker-select-grid{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.1rem}
+.t-pill{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.07em;padding:.35rem .85rem;border:1px solid var(--border);background:transparent;color:var(--sub);cursor:pointer;transition:all .15s;border-radius:3px}
+.t-pill:hover{border-color:var(--cyan);color:var(--cyan)}
+.t-pill.tp-on{background:rgba(0,200,255,.1);color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 6px var(--glow-b)}
+.t-pill.lrv-pill:hover,.t-pill.lrv-pill.tp-on{border-color:var(--accent);color:var(--accent)}
+.t-pill.lrv-pill.tp-on{background:var(--adim);box-shadow:0 0 6px var(--glow-g)}
+.t-pill.buf-pill:hover,.t-pill.buf-pill.tp-on{border-color:var(--gold);color:var(--gold)}
+.t-pill.buf-pill.tp-on{background:rgba(245,158,11,.1)}
+.t-pill.div-pill:hover,.t-pill.div-pill.tp-on{border-color:var(--div-col);color:var(--div-col)}
+.t-pill.div-pill.tp-on{background:rgba(129,140,248,.1)}
+.pill-sep{font-size:.6rem;color:var(--border2);padding:.3rem .2rem;align-self:center}
+.news-grid{display:grid;gap:0}
+.news-row{display:flex;align-items:flex-start;gap:.9rem;padding:.65rem 0;border-bottom:1px solid var(--border)}
+.news-row:last-child{border-bottom:none}
+.news-meta{display:flex;flex-direction:column;gap:3px;min-width:86px;flex-shrink:0;padding-top:2px}
+.news-ts{font-size:.61rem;color:var(--sub)}
+.news-src{font-size:.6rem;color:var(--cyan);text-decoration:none;display:block;font-weight:500}
+.news-src:hover{text-decoration:underline}
+.news-hl{font-size:.73rem;color:var(--text);text-decoration:none;display:block;line-height:1.6}
+.news-hl:hover{color:var(--cyan)}
+
+/* UTILS */
+.up{color:var(--green)}.dn{color:var(--red)}.neu{color:var(--sub)}
+.spin{display:inline-block;width:10px;height:10px;border:1.5px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:rot .65s linear infinite;vertical-align:middle;margin-right:5px}
+@keyframes rot{to{transform:rotate(360deg)}}
+.sk{display:inline-block;background:var(--s3);border-radius:3px;animation:sh 1.2s infinite}
+@keyframes sh{0%,100%{opacity:.35}50%{opacity:.85}}
+footer{border-top:1px solid var(--border);padding-top:.9rem;margin-top:1.5rem;font-size:.63rem;color:var(--sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem}
+@media(max-width:900px){.ix-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){h1{font-size:1.5rem}.pg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div>
+    <div class="logo-tag">Triple Screener · Earnings-Verified · Finnhub.io Live</div>
+    <h1>Personal <em>Screener</em></h1>
+  </div>
+  <div class="hdr-right">
+    <div class="clocks">
+      <div class="clock-block">
+        <span class="clock-label">Local</span>
+        <span class="clock-val" id="clock-local">—</span>
+      </div>
+      <div class="clock-div"></div>
+      <div class="clock-block">
+        <span class="clock-label">ET</span>
+        <span class="clock-val" id="clock-et">—</span>
+      </div>
+    </div>
+    <div class="hdr-btns">
+      <button class="btn" id="mode-btn" onclick="toggleMode()">Light</button>
+      <button class="btn" onclick="testConn()">⚡ Test API</button>
+      <button class="btn hi" onclick="initDash()">↺ Refresh All</button>
+    </div>
+  </div>
+</header>
+
+<div id="banner"></div>
+
+<div class="sbar">
+  <span><span class="dot da" id="dot"></span><span id="s-mkt" class="unk">Checking...</span></span>
+  <span class="sep">|</span>
+  <span class="si" id="s-loaded">Loading...</span>
+  <span class="sep">|</span>
+  <span class="si">Live ticks: <strong id="ws-st" style="color:var(--muted)">—</strong></span>
+  <span class="sep">|</span>
+  <span class="si">Updated: <strong id="s-time">—</strong></span>
+</div>
+
+<!-- ETF PRICE STRIP (display only) -->
+<div class="ix-grid">
+  <div class="ix"><div class="ix-sym">SCHD <span class="ix-tag">ETF</span></div><div class="ix-p" id="ix-SCHD-p">—</div><div class="ix-c" id="ix-SCHD-c">—</div></div>
+  <div class="ix"><div class="ix-sym">SPY <span class="ix-tag">ETF</span></div><div class="ix-p" id="ix-SPY-p">—</div><div class="ix-c" id="ix-SPY-c">—</div></div>
+  <div class="ix"><div class="ix-sym">VOO <span class="ix-tag">ETF</span></div><div class="ix-p" id="ix-VOO-p">—</div><div class="ix-c" id="ix-VOO-c">—</div></div>
+  <div class="ix"><div class="ix-sym">VTI <span class="ix-tag">ETF</span></div><div class="ix-p" id="ix-VTI-p">—</div><div class="ix-c" id="ix-VTI-c">—</div></div>
+</div>
+
+<!-- ═══ LOW RISK VALUE SCREEN ═══ -->
+<div class="sec-wrap">
+  <button class="sec-toggle lrv-tog" onclick="tog('lrv')">
+    <div class="tl">
+      <span class="ti">⬡</span>
+      <div>
+        <div class="tt">Low Risk Value Screen</div>
+        <div class="tm">Rev Gr 5Y >50% · Rev Gr 1Y >5% · EPS Gr >5% · ROE >15% · D/E 0–1 · FCF >0 · PEG 0–1 · Excl. Financials, Materials, Energy, Utilities, RE · 4 pass / 15 near-miss</div>
+      </div>
+    </div>
+    <span class="ta open" id="lrv-arr">▼</span>
+  </button>
+  <div class="sec-body open" id="lrv-body">
+    <div class="crit-bar">
+      <span class="crit ca">Rev Gr 5Y &gt;50%</span><span class="crit ca">Rev Gr 1Y &gt;5%</span><span class="crit ca">EPS Gr &gt;5%</span><span class="crit ca">ROE &gt;15%</span><span class="crit ca">D/E: 0–1</span><span class="crit ca">FCF &gt;0</span><span class="crit ca">PEG: 0–1</span>
+    </div>
+    <div class="sec-inner">
+      <div style="font-size:.59rem;color:var(--muted);margin-bottom:.75rem">✓ 4 stocks pass all 7 criteria · verified against most recent earnings · click any card for live metrics + insights</div>
+      <div class="pg" id="lrv-pg"></div>
+      <div class="det" id="lrv-det">
+        <div class="dh"><div><div class="dsym" id="lrv-sym">—</div><div class="dname" id="lrv-nm">—</div></div><div class="dpb"><div class="dpr" id="lrv-pr">—</div><div class="dchg" id="lrv-ch">—</div><div class="dohlc" id="lrv-oh">—</div></div></div>
+        <div class="mg" id="lrv-mt"></div>
+        <div class="insights" id="lrv-ins"></div>
+        <div class="nw"><div class="nh lrv-nh">Recent News</div><div id="lrv-nw"><span class="spin"></span></div></div>
+      </div>
+      <div class="fl">↓ Top 15 Near-Misses · Sorted by Closeness</div>
+      <table class="ft"><thead><tr><th>Ticker</th><th>Price</th><th>1D</th><th>Rev 5Y</th><th>Rev 1Y</th><th>EPS Gr</th><th>ROE</th><th>D/E</th><th>FCF</th><th>PEG</th><th>Fail Reason(s)</th></tr></thead><tbody id="lrv-fb"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BUFFETT STOCKS ═══ -->
+<div class="sec-wrap">
+  <button class="sec-toggle buf-tog" onclick="tog('buf')">
+    <div class="tl">
+      <span class="ti" style="color:var(--gold)">◈</span>
+      <div>
+        <div class="tt">Buffett Stocks</div>
+        <div class="tm">PE 0–25 · PB 0–5 · ROE &gt;20% · D/E 0–0.5 · FCF &gt;0 · Dividend &gt;0 · Rev Gr 5Y &gt;20% · 3 pass / 15 near-miss</div>
+      </div>
+    </div>
+    <span class="ta" id="buf-arr">▼</span>
+  </button>
+  <div class="sec-body" id="buf-body">
+    <div class="crit-bar">
+      <span class="crit cb">PE: 0–25</span><span class="crit cb">PB: 0–5</span><span class="crit cb">ROE &gt;20%</span><span class="crit cb">D/E: 0–0.5</span><span class="crit cb">FCF &gt;0</span><span class="crit cb">Dividend &gt;0</span><span class="crit cb">Rev Gr 5Y &gt;20%</span>
+    </div>
+    <div class="sec-inner">
+      <div style="font-size:.59rem;color:var(--muted);margin-bottom:.75rem">✓ 3 stocks pass all 7 Buffett criteria · PE&lt;25 + PB&lt;5 + D/E&lt;0.5 + dividend is extremely restrictive · click any card for insights</div>
+      <div class="pg" id="buf-pg"></div>
+      <div class="det" id="buf-det">
+        <div class="dh"><div><div class="dsym" id="buf-sym">—</div><div class="dname" id="buf-nm">—</div></div><div class="dpb"><div class="dpr" id="buf-pr">—</div><div class="dchg" id="buf-ch">—</div><div class="dohlc" id="buf-oh">—</div></div></div>
+        <div class="mg" id="buf-mt"></div>
+        <div class="insights" id="buf-ins"></div>
+        <div class="nw"><div class="nh buf-nh">Recent News</div><div id="buf-nw"><span class="spin"></span></div></div>
+      </div>
+      <div class="fl">↓ Top 15 Near-Misses · Sorted by Closeness</div>
+      <table class="ft"><thead><tr><th>Ticker</th><th>Price</th><th>1D</th><th>PE</th><th>PB</th><th>ROE</th><th>D/E</th><th>FCF</th><th>Div Yield</th><th>Rev 5Y</th><th>Fail Reason(s)</th></tr></thead><tbody id="buf-fb"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DIVIDEND GROWTH STOCKS ═══ -->
+<div class="sec-wrap">
+  <button class="sec-toggle div-tog" onclick="tog('div')">
+    <div class="tl">
+      <span class="ti" style="color:var(--div-col)">◆</span>
+      <div>
+        <div class="tt">Dividend Growth Stocks</div>
+        <div class="tm">Div Yield &gt;1.5% · Div Growth 5Y+ · Rev Gr 5Y &gt;20% · ROE &gt;15% · D/E &lt;1 · FCF &gt;0 · Payout &lt;70% · Top 500 US mkt cap · Ranked by yield · 5 pass / 15 near-miss</div>
+      </div>
+    </div>
+    <span class="ta" id="div-arr">▼</span>
+  </button>
+  <div class="sec-body" id="div-body">
+    <div class="crit-bar">
+      <span class="crit cd">Div Yield &gt;1.5%</span><span class="crit cd">5Y Consecutive Growth</span><span class="crit cd">Rev Gr 5Y &gt;20%</span><span class="crit cd">ROE &gt;15%</span><span class="crit cd">D/E &lt;1</span><span class="crit cd">FCF &gt;0</span><span class="crit cd">Payout &lt;70%</span>
+    </div>
+    <div class="sec-inner">
+      <div style="font-size:.59rem;color:var(--muted);margin-bottom:.75rem">✓ 5 stocks pass all 7 dividend criteria · ranked by yield descending · growing companies with strong, sustainable dividends · click any card for insights</div>
+      <div class="pg" id="div-pg"></div>
+      <div class="det" id="div-det">
+        <div class="dh"><div><div class="dsym" id="div-sym">—</div><div class="dname" id="div-nm">—</div></div><div class="dpb"><div class="dpr" id="div-pr">—</div><div class="dchg" id="div-ch">—</div><div class="dohlc" id="div-oh">—</div></div></div>
+        <div class="mg" id="div-mt"></div>
+        <div class="insights" id="div-ins"></div>
+        <div class="nw"><div class="nh div-nh">Recent News</div><div id="div-nw"><span class="spin"></span></div></div>
+      </div>
+      <div class="fl">↓ Top 15 Near-Misses · Sorted by Closeness to Passing</div>
+      <table class="ft"><thead><tr><th>Ticker</th><th>Price</th><th>1D</th><th>Div Yield</th><th>Div Gr 5Y</th><th>Rev Gr 5Y</th><th>ROE</th><th>D/E</th><th>FCF</th><th>Payout</th><th>Fail Reason(s)</th></tr></thead><tbody id="div-fb"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MILITARY CONTRACTS SCREEN ═══ -->
+<div class="sec-wrap">
+  <button class="sec-toggle mil-tog" onclick="tog('mil')">
+    <div class="tl">
+      <span class="ti" style="color:var(--mil)">⬟</span>
+      <div>
+        <div class="tt">U.S. Military Contract Companies</div>
+        <div class="tm">Rev Gr 5Y &gt;20% · Rev Gr 1Y &gt;4% · Op Margin &gt;8% · ROA &gt;4% · Net Debt/EBITDA &lt;3.5x · FCF &gt;0 · PE &lt;30 · DoD Revenue &gt;40% · 5 pass / 15 near-miss · Reviewed weekly</div>
+      </div>
+    </div>
+    <span class="ta" id="mil-arr">▼</span>
+  </button>
+  <div class="sec-body" id="mil-body">
+    <div id="mil-review-bar" class="review-banner">
+      <span class="rb-dot" id="mil-rb-dot"></span>
+      <span class="rb-txt" id="mil-rb-txt">Checking review status...</span>
+      <span class="rb-date" id="mil-rb-date"></span>
+      <button class="review-btn" onclick="milMarkReviewed()">✓ Mark Reviewed</button>
+    </div>
+    <div class="crit-bar">
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Rev Gr 5Y &gt;20%</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Rev Gr 1Y &gt;4%</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Op Margin &gt;8%</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">ROA &gt;4%</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Net Debt/EBITDA &lt;3.5x</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">FCF &gt;0</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">PE &lt;30</span>
+    </div>
+    <div class="sec-inner">
+      <div style="font-size:.59rem;color:var(--sub);margin-bottom:.75rem">✓ 5 stocks pass all 7 criteria · Metrics adapted for long-cycle government contracting · Screener reviewed every Friday · click any card for insights</div>
+      <div class="pg" id="mil-pg"></div>
+      <div class="det" id="mil-det">
+        <div class="dh"><div><div class="dsym" id="mil-sym">—</div><div class="dname" id="mil-nm">—</div></div><div class="dpb"><div class="dpr" id="mil-pr">—</div><div class="dchg" id="mil-ch">—</div><div class="dohlc" id="mil-oh">—</div></div></div>
+        <div class="mg" id="mil-mt"></div>
+        <div class="insights" id="mil-ins"></div>
+        <div class="nw"><div class="nh mil-nh">Recent News & Contract Activity</div><div id="mil-nw"><span class="spin"></span></div></div>
+      </div>
+      <div class="fl">↓ Top 15 Near-Misses · Sorted by Closeness to Passing</div>
+      <table class="ft"><thead><tr><th>Ticker</th><th>Price</th><th>1D</th><th>Rev 5Y</th><th>Rev 1Y</th><th>Op Margin</th><th>ROA</th><th>ND/EBITDA</th><th>FCF</th><th>PE</th><th>Fail Reason(s)</th></tr></thead><tbody id="mil-fb"></tbody></table>
+    </div>
+  </div>
+</div>
+<div class="sec-wrap">
+  <button class="sec-toggle pmn-tog" onclick="tog('pmn')">
+    <div class="tl">
+      <span class="ti" style="color:var(--cyan)">◉</span>
+      <div>
+        <div class="tt">Post-Market News Feed</div>
+        <div class="tm" id="pmn-tm">Select a ticker from any screener · Auto-runs after market close (4:00 PM ET) · Individual stocks only</div>
+      </div>
+    </div>
+    <span class="ta" id="pmn-arr">▼</span>
+  </button>
+  <div class="sec-body" id="pmn-body">
+    <div class="sec-inner">
+      <div class="pmn-status">
+        <span class="pmn-dot pmn-off" id="pmn-dot"></span>
+        <span id="pmn-st-txt">Idle</span>
+        <span class="sep">|</span>
+        <span id="pmn-next" style="color:var(--muted)">—</span>
+        <button class="btn" style="padding:.25rem .65rem;font-size:.58rem" onclick="pmnFetchNow()">▶ Fetch Now</button>
+      </div>
+      <div style="font-size:.58rem;color:var(--muted);margin-bottom:.7rem">
+        <span style="color:var(--accent)">⬡ Low Risk Value</span> &nbsp;·&nbsp;
+        <span style="color:var(--gold)">◈ Buffett</span> &nbsp;·&nbsp;
+        <span style="color:var(--div-col)">◆ Dividend</span> &nbsp;·&nbsp;
+        <span style="color:var(--mil)">⬟ Military</span>
+      </div>
+      <div class="ticker-select-grid" id="pmn-pills"></div>
+      <div id="pmn-feed"><div style="font-size:.63rem;color:var(--muted);padding:.5rem 0">Select a ticker above to load post-market headlines. Auto-fetches daily after 4:00 PM ET.</div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>Data: Finnhub.io · Low Risk Value · Buffett · Dividend Growth · March 2026</span>
+  <span>For informational purposes only · Not financial advice · Made by Jonas Flynn</span>
+</footer>
+</div>
+
+<script>
+const KEY='d6svfvpr01qoqoirlv50d6svfvpr01qoqoirlv5g';
+const BASE='https://finnhub.io/api/v1';
+
+// ── LOW RISK VALUE PASSES ──
+const LRV_PASS=[
+  {sym:'NVDA',name:'Nvidia Corporation',ear:'Q4 FY26 · Feb 26 2026',
+   mets:{rev5y:'+715%',rev1y:'+73%',epsGr:'+82%',roe:'101.5%',de:'0.07',fcf:'+$81B',peg:'0.56'},
+   chks:['Rev 5Y: $26.9B→$220B FY26 (+715%)','Rev 1Y: +73% Q4 FY26 YoY ($68.1B Q4 alone)','EPS Growth: +82% non-GAAP FY26','ROE: 101.5%','D/E: 0.07','FCF: ~$81B TTM','PEG: 0.56'],
+   ins:[{icon:'✓',t:'Dominant GPU monopoly — ~93% server GPU market share; Blackwell architecture ramp is still early with GB200 NVL racks scaling at every major hyperscaler'},{icon:'✓',t:'Q4 FY26 single-quarter revenue of $68.1B surpassed full-year FY24 of $60.9B — growth rate is structurally accelerating, not slowing'},{icon:'⚠',t:'H20 export control charge of $4.5B in Q1 FY26 — China market restrictions are an ongoing risk to addressable market'},{icon:'⚠',t:'Concentration risk — TSMC CoWoS-L packaging and HBM3e from SK Hynix remain single-source bottlenecks limiting output ramp speed'},{icon:'✓',t:'PEG 0.56 at current prices: market is pricing ~35-40% forward EPS growth, which is conservative given the current trajectory'}]},
+  {sym:'AVGO',name:'Broadcom Inc',ear:'Q1 FY26 · Mar 5 2026',
+   mets:{rev5y:'+226%',rev1y:'+29%',epsGr:'+31%',roe:'33.4%',de:'0.83',fcf:'+$19B',peg:'0.60'},
+   chks:['Rev 5Y: $23.9B→$78B+ (+226%)','Rev 1Y: +29% Q1 FY26 YoY (record $14.9B)','EPS Growth: +31% non-GAAP Q1 FY26','ROE: 33.4%','D/E: 0.83','FCF: ~$19B TTM','PEG: 0.60'],
+   ins:[{icon:'✓',t:'Custom ASIC business at scale — shipping record volumes to Google and Meta; $10B+ reported hyperscaler order; TAM projected $100B+ by 2030'},{icon:'✓',t:'Q1 FY26 AI revenue reached $4.1B, up 77% YoY — VMware integration ahead of schedule with $8.5B annualized synergies'},{icon:'⚠',t:'D/E at 0.83 remains elevated from VMware acquisition debt — watching deleveraging pace; $14B paid down in FY25'},{icon:'✓',t:'Dividend: 14 consecutive years of increases, 12.5% 5Y CAGR — payout ratio at 46% is sustainable and growing'},{icon:'✓',t:'Networking silicon (Tomahawk 6, Jericho 3) uniquely critical as AI clusters scale beyond single-rack to multi-fabric topologies'}]},
+  {sym:'MRVL',name:'Marvell Technology',ear:'Q4 FY26 · Mar 5 2026',
+   mets:{rev5y:'+84%',rev1y:'+42%',epsGr:'+81%',roe:'18.0%',de:'0.34',fcf:'+$1.8B',peg:'0.62'},
+   chks:['Rev 5Y: $4.46B→$8.195B FY26 (+84%)','Rev 1Y: +42% FY26 full year (new record)','EPS Growth: +81% non-GAAP ($2.84/share FY26)','ROE: 18.0%','D/E: 0.34','FCF: ~$1.8B FY26','PEG: 0.62'],
+   ins:[{icon:'✓',t:'FY26 record revenue $8.195B; Q1 FY27 guided $2.4B (+~27% YoY) — acceleration expected each quarter in FY27'},{icon:'✓',t:'Design wins in FY26 hit all-time record — Celestial AI and XConn acquisitions add optical/interconnect capability for next-gen AI clusters'},{icon:'⚠',t:'ROE at 18% remains the weakest pass — large goodwill from Inphi/Cavium dilutes return; watch for goodwill amortization trends'},{icon:'✓',t:'PAM4 electro-optics revenue growing strongly; critical chokepoint infrastructure as AI cluster bandwidth requirements hit terabits/sec'},{icon:'⚠',t:'Lumpiness risk — large custom ASIC program revenue can shift quarter-to-quarter; FY27 guidance has wide +/- 5% variance band'}]},
+  {sym:'META',name:'Meta Platforms',ear:'Q4 2025 · Jan 28 2026',
+   mets:{rev5y:'+134%',rev1y:'+22%',epsGr:'+60%',roe:'30.2%',de:'0.39',fcf:'+$32B',peg:'0.88'},
+   chks:['Rev 5Y: $86B→$201B FY25 (+134%)','Rev 1Y: +22% FY25 ($201B full year)','EPS Growth: +60% FY25 ($23.86 GAAP vs $14.87)','ROE: 30.2%','D/E: 0.39','FCF: ~$32B (ops $73B - capex $72.2B)','PEG: 0.88'],
+   ins:[{icon:'✓',t:'3.58B daily active people Dec 2025 (+7% YoY) — near-monopoly on social advertising; ad impressions +18% Q4, price per ad +6%'},{icon:'⚠',t:'FY2026 capex guided at $115B-135B (up from $72.2B in FY25) — massive AI infrastructure investment will compress near-term FCF significantly'},{icon:'✓',t:'Llama open-source AI strategy: accelerating AI ad targeting; WhatsApp paid messaging hit $2B annual run rate in Q4 2025'},{icon:'⚠',t:'Reality Labs continues losing ~$5B/year — Q1 FY26 guided $53.5-56.5B revenue; expenses rising +40% YoY in Q4 driven by infrastructure'},{icon:'✓',t:'PEG 0.88 still below 1.0 — EPS expected to grow strongly as AI infrastructure investment converts to ad revenue lift in 2026-2027'}]},
+];
+
+// ── LOW RISK VALUE NEAR-MISSES (top 15 by closeness) ──
+const LRV_FAIL=[
+  {sym:'VRT', name:'Vertiv Holdings',  r5:'✓ >50%',r1:'✓ >20%',eg:'✓ High',roe:'✓ >15%',de:'✓ <1',fcf:'✓ Pos',pg:'✗ 1.23',f:['PEG 1.23 — closest miss']},
+  {sym:'QCOM',name:'Qualcomm',         r5:'✓ >50%',r1:'✓ +13%',eg:'✓ >5%', roe:'✓ >15%',de:'✓ 0.64',fcf:'✓ Pos',pg:'✗ ~1.2', f:['PEG ~1.2']},
+  {sym:'MSFT',name:'Microsoft',        r5:'✓ ~45%',r1:'✓ +17%',eg:'✓ +23%',roe:'✓ 34.4%',de:'✓ 0.32',fcf:'✓ Pos',pg:'✗ 1.67',f:['PEG 1.67']},
+  {sym:'GOOGL',name:'Alphabet',        r5:'✓ ~60%',r1:'✓ +14%',eg:'✓ +28%',roe:'✓ 35.7%',de:'✓ 0.16',fcf:'✓ Pos',pg:'✗ 1.69',f:['PEG 1.69']},
+  {sym:'LRCX',name:'Lam Research',     r5:'✓ >50%',r1:'✓ +28%',eg:'✓ +46%',roe:'✓ 65.6%',de:'✓ 0.44',fcf:'✓ Pos',pg:'✗ 1.91',f:['PEG 1.91']},
+  {sym:'AMAT',name:'Applied Materials',r5:'✓ >50%',r1:'✓ +7%', eg:'✓ >5%', roe:'✓ High', de:'✓ <1', fcf:'✓ Pos',pg:'✗ ~2.0',f:['PEG ~2.0']},
+  {sym:'KLAC',name:'KLA Corp',         r5:'✓ >50%',r1:'✓ +15%',eg:'✓ >5%', roe:'✓ High', de:'✓ <1', fcf:'✓ Pos',pg:'✗ ~2.1',f:['PEG ~2.1']},
+  {sym:'AMD', name:'AMD',              r5:'✓ >50%',r1:'✓ +14%',eg:'✓ >5%', roe:'✓ >15%',de:'✓ 0.05',fcf:'✓ Pos',pg:'✗ ~2.5',f:['PEG ~2.5']},
+  {sym:'NOW', name:'ServiceNow',       r5:'✓ >50%',r1:'✓ +22%',eg:'✓ >5%', roe:'✓ >15%',de:'✓ 0.21',fcf:'✓ Pos',pg:'✗ ~2.5',f:['PEG ~2.5']},
+  {sym:'PLTR',name:'Palantir',         r5:'✓ >50%',r1:'✓ +36%',eg:'✓ High',roe:'✓ >15%',de:'✓ 0.00',fcf:'✓ Pos',pg:'✗ 2.3', f:['PEG 2.3']},
+  {sym:'PANW',name:'Palo Alto Networks',r5:'✓ >50%',r1:'✓ +14%',eg:'✓ >5%',roe:'✓ High',de:'✓ 0.16',fcf:'✓ Pos',pg:'✗ ~2.8',f:['PEG ~2.8']},
+  {sym:'CRWD',name:'CrowdStrike',      r5:'✓ >50%',r1:'✓ +29%',eg:'✓ >5%', roe:'✗ <15%',de:'✓ 0.14',fcf:'✓ Pos',pg:'✗ ~3.0',f:['PEG ~3.0','ROE <15%']},
+  {sym:'ORCL',name:'Oracle',           r5:'✓ >50%',r1:'✓ +9%', eg:'✓ >5%', roe:'✓ High', de:'✗ >1', fcf:'✓ Pos',pg:'✗ ~2.2',f:['D/E >1','PEG ~2.2']},
+  {sym:'ARM', name:'Arm Holdings',     r5:'— <3Y',  r1:'✓ >5%', eg:'✓ >5%', roe:'✓ >15%',de:'✓ <1', fcf:'✓ Pos',pg:'✗ ~3.5',f:['PEG ~3.5']},
+  {sym:'DELL',name:'Dell Technologies',r5:'✗ <50%',r1:'✓ >5%', eg:'✓ >5%', roe:'✓ High', de:'✗ >1', fcf:'✓ Pos',pg:'✗ ~1.5',f:['D/E >1','PEG ~1.5','Rev 5Y <50%']},
+];
+
+// ── BUFFETT PASSES ──
+const BUF_PASS=[
+  {sym:'TRV',name:'Travelers Companies',ear:'Q4 2025 · Jan 21 2026',
+   mets:{pe:'~14',pb:'~2.4',roe:'~22%',de:'0.23',fcf:'Positive',div:'~1.5%',rev5y:'+64%'},
+   chks:['PE: ~14','PB: ~2.4','ROE: ~22% (record FY2025)','D/E: 0.23','FCF: Positive','Div Yield: ~1.5%','Rev 5Y: $28.7B→$47B (+64%)'],
+   ins:[{icon:'✓',t:'Record underwriting income in 2025 — combined ratio improved to 89.5% as pricing power offset catastrophe claims'},{icon:'✓',t:'P&C insurance pricing cycle remains firm: commercial lines renewing at +8-10% in Q4 2025'},{icon:'⚠',t:'Climate risk is a long-term structural headwind — catastrophe frequency increasing in both commercial and personal lines'},{icon:'✓',t:'Capital returns: $3.2B returned via dividends and buybacks in FY2025; dividend streak 20+ consecutive years'},{icon:'⚠',t:'Investment portfolio exposed to interest rate volatility — large fixed income book marked to market'}]},
+  {sym:'GD',name:'General Dynamics',ear:'Q4 2025 · Jan 29 2026',
+   mets:{pe:'~19',pb:'~3.7',roe:'~21%',de:'0.42',fcf:'Positive',div:'~2.1%',rev5y:'+27%'},
+   chks:['PE: ~19','PB: ~3.7','ROE: ~21%','D/E: 0.42','FCF: Positive','Div Yield: ~2.1%','Rev 5Y: $37.9B→$48B (+27%)'],
+   ins:[{icon:'✓',t:'Gulfstream G700/G800 production ramping — 8+ year backlog in business aviation provides earnings visibility through 2032'},{icon:'✓',t:'Defense budget tailwinds: NATO spending pledges, Virginia-class submarine program, and Stryker upgrades all funded'},{icon:'⚠',t:'Marine Systems segment facing workforce and supply chain pressures — submarine build rates below contract targets'},{icon:'✓',t:'32 consecutive years of dividend increases — one of the most durable dividend growth streaks in defense'},{icon:'⚠',t:'Columbia-class submarine cost overruns are a watch item — fixed-price contracts could pressure margins if inflation persists'}]},
+  {sym:'CSCO',name:'Cisco Systems',ear:'Q2 FY26 · Feb 12 2026',
+   mets:{pe:'~16',pb:'~4.1',roe:'~27%',de:'0.20',fcf:'Positive',div:'~3.2%',rev5y:'~18-22%'},
+   chks:['PE: ~16','PB: ~4.1','ROE: ~27%','D/E: 0.20','FCF: Positive','Div Yield: ~3.2%','Rev 5Y: +18-22% (incl. Splunk)'],
+   ins:[{icon:'✓',t:'Splunk acquisition adds $4B+ annual recurring revenue and accelerates transition to software/subscription model'},{icon:'✓',t:'3.2% dividend yield with 14 consecutive years of increases — among the highest reliable yields in large-cap tech'},{icon:'⚠',t:'Hardware refresh cycle uncertainty — enterprise networking capex tied to AI infrastructure but timing unpredictable'},{icon:'✓',t:'Security segment accelerating post-Splunk integration — unified observability platform differentiates vs. point solutions'},{icon:'⚠',t:'Rev 5Y organic growth borderline (~10% ex-Splunk) — technically passes on inclusive basis but watch for organic deceleration'}]},
+];
+
+// ── BUFFETT NEAR-MISSES (15) ──
+const BUF_FAIL=[
+  {sym:'UNH', name:'UnitedHealth',    pe:'✓ ~15',pb:'✓ ~4.5',roe:'✓ ~25%',de:'✗ ~0.78',fcf:'✓ Pos',div:'✓ 1.6%',r5:'✓ +56%',f:['D/E ~0.78 (>0.5)']},
+  {sym:'V',   name:'Visa Inc',        pe:'✗ ~31',pb:'✗ ~13', roe:'✓ 45%', de:'✓ 0.50',fcf:'✓ Pos',div:'✓ 0.8%',r5:'✓ >20%',f:['PE >25','PB >5']},
+  {sym:'AAPL',name:'Apple Inc',       pe:'✗ ~33',pb:'✗ ~52', roe:'✓ 137%',de:'✓ 0.53',fcf:'✓ Pos',div:'✓ 0.5%',r5:'✓ >20%',f:['PE >25','PB >5']},
+  {sym:'MSFT',name:'Microsoft',       pe:'✗ ~33',pb:'✗ ~12', roe:'✓ 34%', de:'✓ 0.32',fcf:'✓ Pos',div:'✓ 0.8%',r5:'✓ >20%',f:['PE >25','PB >5']},
+  {sym:'AXP', name:'American Express',pe:'✓ ~22',pb:'✓ ~3.3',roe:'✓ 34%', de:'✗ 1.91',fcf:'✓ Pos',div:'✓ 0.95%',r5:'✓ >20%',f:['D/E 1.91 (>0.5)']},
+  {sym:'MRK', name:'Merck & Co',      pe:'✓ ~14',pb:'✓ ~4.5',roe:'✓ ~30%',de:'✗ ~1.1', fcf:'✓ Pos',div:'✓ 3.3%',r5:'✓ >20%',f:['D/E ~1.1 (>0.5)']},
+  {sym:'KO',  name:'Coca-Cola',       pe:'✓ ~24',pb:'✗ ~10', roe:'✓ >20%',de:'✗ >1',  fcf:'✓ Pos',div:'✓ 3.0%',r5:'✓ >20%',f:['PB ~10 (>5)','D/E >1']},
+  {sym:'MA',  name:'Mastercard',      pe:'✗ ~36',pb:'✗ High',roe:'✓ High',de:'✗ >1',  fcf:'✓ Pos',div:'✓ 0.6%',r5:'✓ >20%',f:['PE >25','PB >5','D/E >1']},
+  {sym:'JPM', name:'JPMorgan Chase',  pe:'✓ ~13',pb:'✓ ~2.1',roe:'✗ ~17%',de:'✗ >1',  fcf:'✓ Pos',div:'✓ 2.2%',r5:'✓ >20%',f:['ROE ~17% (<20%)','D/E >1 (bank)']},
+  {sym:'JNJ', name:'J&J',             pe:'✓ ~14',pb:'✓ ~4.8',roe:'✗ ~15%',de:'✓ 0.43',fcf:'✓ Pos',div:'✓ 3.3%',r5:'✗ ~7%', f:['ROE ~15% (<20%)','Rev 5Y ~7%']},
+  {sym:'PG',  name:'Procter & Gamble',pe:'✓ ~24',pb:'✗ ~7.5',roe:'✓ >20%',de:'✗ >0.5',fcf:'✓ Pos',div:'✓ 2.5%',r5:'✗ ~18%',f:['PB >5','Rev 5Y ~18%']},
+  {sym:'ABT', name:'Abbott Labs',     pe:'✓ ~22',pb:'✓ ~4.8',roe:'✗ ~17%',de:'✓ 0.32',fcf:'✓ Pos',div:'✓ 2.0%',r5:'✗ <20%',f:['ROE ~17%(<20%)','Rev 5Y <20%']},
+  {sym:'AVGO',name:'Broadcom',        pe:'✓ ~25',pb:'✗ ~23', roe:'✓ 33%', de:'✓ 0.83',fcf:'✓ Pos',div:'✓ 0.8%',r5:'✓ >20%',f:['PB ~23 (>5)']},
+  {sym:'MCD', name:"McDonald's",      pe:'✓ ~22',pb:'✗ Neg', roe:'✓ High',de:'✗ >1',  fcf:'✓ Pos',div:'✓ 2.4%',r5:'✓ >20%',f:['PB neg (buybacks)','D/E >1']},
+  {sym:'TXN', name:'Texas Instruments',pe:'✓ ~24',pb:'✗ ~33',roe:'✓ >20%',de:'✓ 0.45',fcf:'✓ Pos',div:'✓ 3.1%',r5:'✗ <20%',f:['PB ~33 (>5)','Rev 5Y <20%']},
+];
+
+// ── DIVIDEND GROWTH PASSES (ranked by yield desc) ──
+const DIV_PASS=[
+  {sym:'QCOM',name:'Qualcomm Inc',ear:'Q1 FY26 · Feb 4 2026',rank:1,
+   mets:{yield:'2.73%',divGr:'6.5% CAGR',rev5y:'+91%',roe:'21.5%',de:'0.64',fcf:'+$12.9B',payout:'71%'},
+   chks:['Div Yield: ~2.73%','Div 5Y CAGR: +6.5% · 22 consecutive years of growth','Rev 5Y: $23.5B→$44.9B TTM (+91%)','ROE: 21.5%','D/E: 0.64','FCF: $12.9B TTM (Q1 FY26: $5.0B op CF)','Payout: ~71% (near ceiling, watch)'],
+   ins:[{icon:'✓',t:'Q1 FY26 record revenue $12.3B — QCT automotive hit record $1.1B (+15% YoY); Alphawave acquisition adds data center DSP capability'},{icon:'✓',t:'New $20B share repurchase authorization announced Mar 2026; returned $3.6B to shareholders in Q1 alone ($949M dividends)'},{icon:'⚠',t:'Payout ratio at 71% is the highest in this screen — DRAM supply constraints expected to weigh on Q2 FY26 handset revenue (~$6B guided)'},{icon:'✓',t:'Automotive revenue $4.4B annual run rate growing 15%+ YoY — diversification away from handset cyclicality is real and accelerating'},{icon:'⚠',t:'Apple QTL license renewal and potential vertical integration of modem chips remains a long-term revenue concentration risk'}]},
+  {sym:'ADP', name:'Automatic Data Processing',ear:'Q2 FY26 · Jan 28 2026',rank:2,
+   mets:{yield:'2.2%',divGr:'12% CAGR',rev5y:'+41%',roe:'~85%',de:'0.25',fcf:'+$4.5B',payout:'65%'},
+   chks:['Div Yield: ~2.2%','Div 5Y CAGR: ~12% · 28 consecutive years (Dividend King)','Rev 5Y: $14B→$19.8B (+41%)','ROE: ~85% (float income + software margins)','D/E: 0.25','FCF: ~$4.5B TTM','Payout: ~65%'],
+   ins:[{icon:'✓',t:'Q2 FY26 beat: revenue $5.4B (+6% YoY), EPS $2.62 (+11%) — raised FY26 guidance to 6%+ revenue and 9-10% adj EPS growth'},{icon:'✓',t:'Dividend King with 28 consecutive years of increases — Lyric HCM platform winning 20,000+ employee clients, 70%+ from new logos'},{icon:'✓',t:'Interest income on client funds (~$2B/year) provides natural rate hedge — float income model is durable regardless of AI disruption'},{icon:'⚠',t:'AI-driven HR automation is a structural long-term risk — Workday, Rippling, and others building AI-native HCM alternatives'},{icon:'✓',t:'ROE ~85% reflects capital-light payroll processing model with extremely sticky enterprise client retention above 92%'}]},
+  {sym:'FAST',name:'Fastenal Company',ear:'Q4 2025 · Jan 15 2026',rank:3,
+   mets:{yield:'2.1%',divGr:'11% CAGR',rev5y:'+35%',roe:'~35%',de:'~0.0',fcf:'+$1.1B',payout:'70%'},
+   chks:['Div Yield: ~2.1%','Div 5Y CAGR: ~11% · 25 consecutive years (Dividend Aristocrat)','Rev 5Y: $5.7B→$7.7B (+35%)','ROE: ~35%','D/E: ~0 (effectively debt-free)','FCF: ~$1.1B TTM','Payout: ~70%'],
+   ins:[{icon:'✓',t:'Fastener and industrial distribution network covers 1,600+ North American locations — proximity advantage vs. Amazon B2B'},{icon:'✓',t:'On-site vending machine and scanner model creates switching costs — installed base growing ~12% annually'},{icon:'⚠',t:'Highly cyclical revenue — industrial activity slowdowns hit Fastenal quickly; 2025 revenue growth was modest'},{icon:'✓',t:'Virtually debt-free balance sheet with high ROE — unusual combination showing operational excellence'},{icon:'⚠',t:'Payout ratio near 70% ceiling — limits dividend growth acceleration unless earnings growth resumes meaningfully'}]},
+  {sym:'ACN', name:'Accenture',ear:'Q2 FY26 · Mar 19 2026',rank:4,
+   mets:{yield:'1.7%',divGr:'15% CAGR',rev5y:'+48%',roe:'~35%',de:'~0.0',fcf:'+$9.5B',payout:'38%'},
+   chks:['Div Yield: ~1.7%','Div 5Y CAGR: ~15% · 20 consecutive years · raised 10% Mar 2026 to $1.63/qtr','Rev 5Y: $44B→$69.7B FY25 (+48%)','ROE: ~35%','D/E: ~0 (minimal debt)','FCF: ~$9.5B TTM (Q2 FY26: $3.7B alone)','Payout: ~38% (most room to grow in screen)'],
+   ins:[{icon:'✓',t:'Q2 FY26: record bookings $22.1B (41 clients with >$100M quarter) — raised full-year revenue guidance; 10% dividend increase signals management confidence'},{icon:'✓',t:'Lowest payout ratio in the screen at 38% with 15% dividend CAGR — best combination of growth safety and headroom for future raises'},{icon:'⚠',t:'Revenue growth 4% in local currency (8% USD) — solid but slower than peak; US Federal government business declining as DOGE cuts bite'},{icon:'✓',t:'85,000+ AI and data professionals; $5B in planned FY26 acquisitions including AI-native capabilities — implementation layer for enterprise AI'},{icon:'⚠',t:'Stock down ~38% from 52-week high on investor concern about DOGE-driven federal IT budget cuts — creates potential re-rating opportunity'}]},
+];
+
+// ── DIVIDEND NEAR-MISSES (15) ──
+const DIV_FAIL=[
+  {sym:'UNH', name:'UnitedHealth Group',dy:'✗ ~2.4%',dg:'✓ 14% CAGR',r5:'✓ +56%',roe:'✗ Declining',de:'✓ ~0.70',fcf:'✓ Pos',po:'✓ ~27%',f:['EPS -65% Q4 2025 YoY','Rev DECLINING in 2026 (first in 40yr)','DOJ criminal/civil investigation','ROE deteriorating rapidly']},
+  {sym:'AVGO',name:'Broadcom',       dy:'✗ 0.81%',dg:'✓ 12% CAGR',r5:'✓ >20%',roe:'✓ 33%',de:'✓ 0.83',fcf:'✓ Pos',po:'✓ 46%',f:['Yield 0.81% (<1.5%)']},
+  {sym:'MSFT',name:'Microsoft',      dy:'✗ 0.8%', dg:'✓ 10% CAGR',r5:'✓ >20%',roe:'✓ 34%',de:'✓ 0.32',fcf:'✓ Pos',po:'✓ 25%',f:['Yield 0.8% (<1.5%)']},
+  {sym:'CSCO',name:'Cisco Systems',  dy:'✓ 3.2%', dg:'✓ 6% CAGR', r5:'✗ ~10%',roe:'✓ 27%',de:'✓ 0.20',fcf:'✓ Pos',po:'✓ 60%',f:['Rev 5Y ~10% (<20%) organic']},
+  {sym:'TXN', name:'Texas Instruments',dy:'✓ 3.1%',dg:'✓ 9% CAGR',r5:'✗ ~flat',roe:'✓ >20%',de:'✓ 0.45',fcf:'✓ Pos',po:'✓ 65%',f:['Rev 5Y flat/decline (cycle)']},
+  {sym:'AAPL',name:'Apple Inc',       dy:'✗ 0.5%', dg:'✓ 5% CAGR', r5:'✓ >20%',roe:'✓ 137%',de:'✓ 0.53',fcf:'✓ Pos',po:'✓ 16%',f:['Yield 0.5% (<1.5%)']},
+  {sym:'V',   name:'Visa Inc',        dy:'✗ 0.8%', dg:'✓ 18% CAGR',r5:'✓ >20%',roe:'✓ 45%', de:'✓ 0.50',fcf:'✓ Pos',po:'✓ 22%',f:['Yield 0.8% (<1.5%)']},
+  {sym:'MA',  name:'Mastercard',      dy:'✗ 0.6%', dg:'✓ 15% CAGR',r5:'✓ >20%',roe:'✓ High',de:'✗ >1',  fcf:'✓ Pos',po:'✓ 20%',f:['Yield 0.6%','D/E >1']},
+  {sym:'JNJ', name:'J&J',             dy:'✓ 3.3%', dg:'✓ 5% CAGR', r5:'✗ ~7%', roe:'✗ ~15%',de:'✓ 0.43',fcf:'✓ Pos',po:'✓ 45%',f:['Rev 5Y ~7% (<20%)','ROE ~15%']},
+  {sym:'MRK', name:'Merck & Co',      dy:'✓ 3.3%', dg:'✓ 5% CAGR', r5:'✓ >20%',roe:'✓ ~30%',de:'✗ ~1.1',fcf:'✓ Pos',po:'✓ 46%',f:['D/E ~1.1 (>1)']},
+  {sym:'PG',  name:'Procter & Gamble',dy:'✓ 2.5%', dg:'✓ 5% CAGR', r5:'✗ ~18%',roe:'✓ >20%',de:'✗ ~0.7',fcf:'✓ Pos',po:'✓ 60%',f:['Rev 5Y ~18% (<20%)','D/E ~0.7']},
+  {sym:'ABBV',name:'AbbVie',          dy:'✓ 3.3%', dg:'✓ 8% CAGR', r5:'✓ +28%',roe:'✓ High',de:'✗ ~1.9',fcf:'✓ Pos',po:'✓ 50%',f:['D/E ~1.9 (>1)']},
+  {sym:'HD',  name:"Home Depot",      dy:'✓ 2.4%', dg:'✓ 11% CAGR',r5:'✓ +24%',roe:'✓ High',de:'✗ Neg', fcf:'✓ Pos',po:'✓ 55%',f:['D/E negative equity (buybacks)']},
+  {sym:'NKE', name:'Nike',            dy:'✓ 2.2%', dg:'✓ 10% CAGR',r5:'✓ +24%',roe:'✓ ~40%',de:'✓ 0.70',fcf:'✓ Pos',po:'✓ 60%',f:['Rev 1Y declining FY2025']},
+  {sym:'AMGN',name:'Amgen',           dy:'✓ 3.6%', dg:'✓ 10% CAGR',r5:'✓ >20%',roe:'✓ High',de:'✗ Very high',fcf:'✓ Pos',po:'✓ 50%',f:['D/E very high (Horizon acq.)']},
+  {sym:'ABT', name:'Abbott Labs',     dy:'✓ 2.0%', dg:'✓ 7% CAGR', r5:'✗ ~15%',roe:'✗ ~17%',de:'✓ 0.32',fcf:'✓ Pos',po:'✓ 42%',f:['Rev 5Y ~15%','ROE ~17% (<15% wait)']},
+];
+
+let quotes={}, selSym={lrv:null,buf:null,div:null,mil:null}, ws=null, pmnTicker='NVDA', pmnTimer=null;
+const $=id=>document.getElementById(id);
+const ff=(n,d=2)=>n!=null?(+n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+const fp=n=>n==null?'—':(n>=0?'+':'')+n.toFixed(2)+'%';
+const cc=n=>n>0?'up':n<0?'dn':'neu';
+const ar=n=>n>0?'▲ ':n<0?'▼ ':'';
+const fdate=ts=>{const d=new Date(ts*1000);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});};
+const okCls=v=>v&&v.startsWith('✓')?'vo':v&&v.startsWith('✗')?'vb':'vn';
+const SCREENER_COLOR={lrv:'var(--accent)',buf:'var(--gold)',div:'var(--div-col)',mil:'var(--mil)'};
+
+async function apiFetch(p){const r=await fetch(BASE+p+(p.includes('?')?'&':'?')+'token='+KEY);if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}
+function showBanner(h,ok=false){const b=$('banner');b.className=ok?'ok':'';b.style.display='block';b.innerHTML=h;}
+async function testConn(){$('banner').style.display='none';try{const d=await apiFetch('/quote?symbol=NVDA');if(d&&d.c>0){showBanner('✓ API OK — NVDA: $'+ff(d.c),true);setTimeout(()=>{$('banner').style.display='none';},3000);}else throw new Error('Empty quote');}catch(e){showBanner('✗ Error: <strong>'+e.message+'</strong><br>Serve via: <code>python3 -m http.server 8080</code> → <a href="http://localhost:8080/finnhub-dashboard.html">localhost:8080</a>');}}
+
+function tog(id){const b=$(id+'-body'),a=$(id+'-arr');const o=b.classList.contains('open');b.classList.toggle('open',!o);a.classList.toggle('open',!o);}
+
+// ── BUILD PASS CARDS ──
+function buildCards(data,gridId,sec){
+  const g=$(gridId);g.innerHTML='';
+  const col=SCREENER_COLOR[sec];
+  data.forEach((s,i)=>{
+    const q=quotes[s.sym],pct=q&&q.pc?(q.c-q.pc)/q.pc*100:null;
+    const d=document.createElement('div');
+    d.className='pc '+sec+'-pc'+(selSym[sec]===s.sym?' sel':'');
+    d.id='pcc-'+sec+'-'+s.sym;
+    d.onclick=()=>openDetail(s.sym,sec);
+    const ph=!q?'<span class="sk" style="width:62px;height:16px"></span>':'$'+ff(q.c);
+    const ch=!q?'<span class="sk" style="width:50px;height:9px;margin-top:4px"></span>':pct!=null?'<span class="'+cc(pct)+'">'+ar(pct)+fp(pct)+'&nbsp;'+(q.c>=q.pc?'+':'')+' $'+ff(q.c-q.pc)+'</span>':'—';
+    // For dividend screen, show yield prominently
+    const extra=sec==='div'?'<div class="rank-badge">#'+s.rank+' by yield</div><div class="yield-big">'+s.mets.yield+'</div>':'';
+    d.innerHTML='<div class="badge '+sec+'-badge">✓ passes all 7</div>'+(extra)
+      +'<div class="pc-sym">'+s.sym+'</div><div class="pc-name">'+s.name+'</div>'
+      +'<div class="pc-price">'+ph+'</div><div class="pc-chg">'+ch+'</div>'
+      +'<div class="pc-mets">'+Object.entries(s.mets).map(([k,v])=>'<div class="pm"><span class="pml">'+k+' </span><span style="color:'+col+'">'+v+'</span></div>').join('')+'</div>'
+      +'<div class="checks">'+s.chks.map(c=>'<div class="ck"><span style="color:'+col+'">✓</span><span style="color:'+col+'">'+c+'</span></div>').join('')+'</div>';
+    g.appendChild(d);
+  });
+}
+
+// ── BUILD FAIL TABLES ──
+function buildFail(data,tid,sec){
+  $(tid).innerHTML=data.map(s=>{
+    const q=quotes[s.sym],pct=q&&q.pc?(q.c-q.pc)/q.pc*100:null;
+    const ps=!q?'<span class="sk" style="width:44px;height:9px"></span>':'$'+ff(q.c);
+    const cs=!q?'—':pct!=null?'<span class="'+cc(pct)+'">'+ar(pct)+fp(pct)+'</span>':'—';
+    const fb=(s.f||[]).map(x=>'<span class="bf">'+x+'</span>').join(' ');
+    let cells='';
+    if(sec==='lrv') cells='<td class="'+okCls(s.r5)+'">'+s.r5+'</td><td class="'+okCls(s.r1)+'">'+s.r1+'</td><td class="'+okCls(s.eg)+'">'+s.eg+'</td><td class="'+okCls(s.roe)+'">'+s.roe+'</td><td class="'+okCls(s.de)+'">'+s.de+'</td><td class="'+okCls(s.fcf)+'">'+s.fcf+'</td><td class="'+okCls(s.pg)+'">'+s.pg+'</td>';
+    else if(sec==='buf') cells='<td class="'+okCls(s.pe)+'">'+s.pe+'</td><td class="'+okCls(s.pb)+'">'+s.pb+'</td><td class="'+okCls(s.roe)+'">'+s.roe+'</td><td class="'+okCls(s.de)+'">'+s.de+'</td><td class="'+okCls(s.fcf)+'">'+s.fcf+'</td><td class="'+okCls(s.div)+'">'+s.div+'</td><td class="'+okCls(s.r5)+'">'+s.r5+'</td>';
+    else if(sec==='mil') cells='<td class="'+okCls(s.r5)+'">'+s.r5+'</td><td class="'+okCls(s.r1)+'">'+s.r1+'</td><td class="'+okCls(s.opMgn)+'">'+s.opMgn+'</td><td class="'+okCls(s.roa)+'">'+s.roa+'</td><td class="'+okCls(s.nd)+'">'+s.nd+'</td><td class="'+okCls(s.fcf)+'">'+s.fcf+'</td><td class="'+okCls(s.pe)+'">'+s.pe+'</td>';
+    else cells='<td class="'+okCls(s.dy)+'">'+s.dy+'</td><td class="'+okCls(s.dg)+'">'+s.dg+'</td><td class="'+okCls(s.r5)+'">'+s.r5+'</td><td class="'+okCls(s.roe)+'">'+s.roe+'</td><td class="'+okCls(s.de)+'">'+s.de+'</td><td class="'+okCls(s.fcf)+'">'+s.fcf+'</td><td class="'+okCls(s.po)+'">'+s.po+'</td>';
+    return '<tr><td><span class="fsym">'+s.sym+'</span><span class="fname">'+s.name+'</span></td><td>'+ps+'</td><td>'+cs+'</td>'+cells+'<td>'+fb+'</td></tr>';
+  }).join('');
+}
+
+// ── OPEN DETAIL PANEL ──
+async function openDetail(sym,sec){
+  selSym[sec]=sym;
+  const data={lrv:LRV_PASS,buf:BUF_PASS,div:DIV_PASS,mil:MIL_PASS}[sec];
+  buildCards(data,sec+'-pg',sec);
+  const s=data.find(x=>x.sym===sym);
+  const q=quotes[sym],pct=q&&q.pc?(q.c-q.pc)/q.pc*100:0;
+  $(sec+'-sym').textContent=sym;
+  const milExtra=sec==='mil'&&s?` · DoD: ${s.dod} · Backlog: ${s.backlog}`:'';
+  $(sec+'-nm').textContent=(s?.name||'')+' · '+(s?.ear||'')+milExtra;
+  $(sec+'-pr').textContent=q?'$'+ff(q.c):'—';
+  $(sec+'-ch').innerHTML=q?'<span class="'+cc(pct)+'">'+ar(pct)+fp(pct)+'&nbsp;'+(q.c>=q.pc?'+':'')+' $'+ff(q.c-q.pc)+'</span>':'—';
+  $(sec+'-oh').textContent=q?'O:$'+ff(q.o)+'  H:$'+ff(q.h)+'  L:$'+ff(q.l)+'  Prev:$'+ff(q.pc):'';
+  $(sec+'-mt').innerHTML='';
+  const col=SCREENER_COLOR[sec];
+  // Build insights
+  if(s?.ins){
+    $(sec+'-ins').innerHTML='<div class="ins-head" style="color:'+col+'">Insights & Risk Factors</div>'
+      +s.ins.map(i=>'<div class="ins-row"><span class="ins-icon" style="color:'+(i.icon==='✓'?'var(--green)':i.icon==='⚠'?'var(--amber)':'var(--red)')+'">'+i.icon+'</span><span class="ins-text">'+i.t+'</span></div>').join('');
+  } else $(sec+'-ins').innerHTML='';
+  $(sec+'-nw').innerHTML='<span class="spin"></span> Loading...';
+  $(sec+'-det').classList.add('vis');
+  $(sec+'-det').scrollIntoView({behavior:'smooth',block:'nearest'});
+
+  // Fetch live metrics
+  try{const m=await apiFetch('/stock/metric?symbol='+sym+'&metric=all');const mt=m?.metric||{};
+    const base=[['52W High',mt['52WeekHigh']?'$'+ff(mt['52WeekHigh']):'—'],['52W Low',mt['52WeekLow']?'$'+ff(mt['52WeekLow']):'—'],['P/E TTM',ff(mt['peBasicExclExtraTTM'],1)],['P/B',ff(mt['pbAnnual'],2)],['EPS TTM',mt['epsBasicExclExtraTTM']?'$'+ff(mt['epsBasicExclExtraTTM']):'—'],['Rev Gr 1Y',mt['revenueGrowthTTMYoy']!=null?fp(mt['revenueGrowthTTMYoy']*100):'—'],['EPS Gr 1Y',mt['epsGrowthTTMYoy']!=null?fp(mt['epsGrowthTTMYoy']*100):'—'],['ROE',mt['roeRfy']!=null?ff(mt['roeRfy'],1)+'%':'—'],['Debt/Eq',ff(mt['totalDebt/totalEquityAnnual'],2)],['PEG',ff(mt['pegNormalizedAnnual'],2)],['Mkt Cap',mt['marketCapitalization']?'$'+ff(mt['marketCapitalization']/1e3,1)+'B':'—'],['FCF/Shr',mt['freeCashFlowPerShareTTM']?'$'+ff(mt['freeCashFlowPerShareTTM']):'—'],['Div Yield',mt['dividendYieldIndicatedAnnual']!=null?ff(mt['dividendYieldIndicatedAnnual'],2)+'%':'—'],['Beta',ff(mt['beta'],2)]];
+    const milExtra=sec==='mil'?[['Op Margin',mt['operatingProfitMarginTTM']!=null?ff(mt['operatingProfitMarginTTM']*100,1)+'%':'—'],['ROA',mt['roaTTM']!=null?ff(mt['roaTTM']*100,1)+'%':'—']]:[];
+    const rows=[...base,...milExtra];
+    $(sec+'-mt').innerHTML=rows.map(([l,v])=>'<div class="mc"><div class="ml">'+l+'</div><div class="mv">'+v+'</div></div>').join('');
+  }catch(e){$(sec+'-mt').innerHTML='<div class="mc" style="grid-column:1/-1"><div class="ml" style="color:var(--red)">'+e.message+'</div></div>';}
+
+  // Fetch news
+  try{const now=new Date(),wk=new Date();wk.setDate(wk.getDate()-7);const fds=d=>d.toISOString().split('T')[0];const news=await apiFetch('/company-news?symbol='+sym+'&from='+fds(wk)+'&to='+fds(now));const items=(Array.isArray(news)?news:[]).slice(0,5);$(sec+'-nw').innerHTML=items.length?items.map(n=>'<div class="ni"><div class="nt">'+fdate(n.datetime)+'</div><div><a class="na" href="'+n.url+'" target="_blank" rel="noopener">'+n.headline+'</a><div class="ns">'+n.source+'</div></div></div>').join(''):'<span style="color:var(--muted);font-size:.63rem">No news in past 7 days</span>';}catch(e){$(sec+'-nw').innerHTML='<span style="color:var(--red);font-size:.63rem">'+e.message+'</span>';}
+}
+
+// ── MILITARY CONTRACT SCREEN DATA ──
+// Metrics: Rev5Y >20% | Rev1Y >4% | Op Margin >8% | ROA >4% | NetDebt/EBITDA <3.5x | FCF >0 | PE <30
+// Reviewed: March 14, 2026 — update every Friday after close
+const MIL_REVIEWED_DATE = 'March 14, 2026';
+const MIL_PASS=[
+  {sym:'LMT',name:'Lockheed Martin',ear:'Q4 2025 · Jan 29 2026',dod:'~73%',backlog:'$194B',
+   mets:{rev5y:'+34%',rev1y:'+6%',opMgn:'~11.3%',roa:'~13%',ndEbitda:'~1.2x',fcf:'+$6.9B',pe:'~17x'},
+   chks:['Rev 5Y: $56B→$75B (+34%)','Rev 1Y: +6% FY2025','Op Margin: ~11.3%','ROA: ~13% (negative equity from buybacks)','Net Debt/EBITDA: ~1.2x','FCF: $6.9B FY2025 (+31% YoY)','PE: ~17x (below defense sector avg of ~23x)'],
+   nextEarnings:'2026-04-22',recentEarnings:'2026-01-29',
+   ins:[{icon:'✓',t:'Record $194B backlog — 2.5+ years of production capacity locked in; $179B at start of 2026 highlighted by CEO as "unprecedented demand"'},{icon:'✓',t:'F-35 program: 191 jets delivered in 2025, lots 18-19 contracts cover 296 more jets; international orders from Poland, Japan, Finland expanding'},{icon:'⚠',t:'$1.6B pre-tax loss on classified programs in 2024; program risks remain elevated for next-gen stealth and hypersonic development'},{icon:'✓',t:'Patriot PAC-3 surge: largest-ever $9.8B interceptor contract Sep 2025; ramping production from 600 to 2,000 missiles/year over 7 years'},{icon:'⚠',t:'Capital allocation shifting: R&D+capex rising 35% to $5B in 2026, reducing near-term FCF but investing in capacity for Golden Dome and FA-XX'}]},
+  {sym:'RTX',name:'RTX Corporation',ear:'Q4 2025 · Jan 28 2026',dod:'~55%',backlog:'$268B',
+   mets:{rev5y:'+40%',rev1y:'+10%',opMgn:'~10.5%',roa:'~6.5%',ndEbitda:'~2.5x',fcf:'+$7.5B',pe:'~22x'},
+   chks:['Rev 5Y: $57B→$80B (+40%)','Rev 1Y: +10% including Q4 at +9.7%','Op Margin: ~10.5% (improving)','ROA: ~6.5%','Net Debt/EBITDA: ~2.5x','FCF: ~$7.5B TTM','PE: ~22x'],
+   nextEarnings:'2026-04-23',recentEarnings:'2026-01-28',
+   ins:[{icon:'✓',t:'Record $268B backlog — Raytheon segment book-to-bill of 2.27x in Q3 2025 means new orders were doubling shipments; demand is structural'},{icon:'✓',t:'Patriot system dominance: $1.7B Spain order, $50B DLA sustainment contract through 2045; AMRAAM production doubled to 1,200/year'},{icon:'✓',t:'Collins Aerospace and Pratt & Whitney commercial recovery adds diversification: P&W commercial aftermarket +23%, Collins +13% in Q3 2025'},{icon:'⚠',t:'GTF engine powder metal issue remediation ongoing through 2026 — still pulling ~1,200 Pratt engines for inspection; manageable but adds cost'},{icon:'✓',t:'NATO rearmament is a decade-long tailwind: 32 NATO members committed to increasing to 3.5% of GDP by 2035, primarily buying American systems'}]},
+  {sym:'GD',name:'General Dynamics',ear:'Q4 2025 · Jan 29 2026',dod:'~77%',backlog:'$109B',
+   mets:{rev5y:'+26%',rev1y:'+10%',opMgn:'~11.5%',roa:'~8%',ndEbitda:'~1.5x',fcf:'+$3.5B',pe:'~19x'},
+   chks:['Rev 5Y: $37.9B→$47.7B (+26%)','Rev 1Y: ~+10% FY2025','Op Margin: ~11.5%','ROA: ~8%','Net Debt/EBITDA: ~1.5x','FCF: ~$3.5B TTM','PE: ~19x'],
+   nextEarnings:'2026-04-28',recentEarnings:'2026-01-29',
+   ins:[{icon:'✓',t:'$109.8B backlog with 2.2x book-to-bill in Q3 2025 — Virginia-class submarine program is a multi-decade sole-source contract'},{icon:'✓',t:'Gulfstream G700/G800 ramp underway: 8+ year backlog in business aviation; military variant demand from heads of state and special operations'},{icon:'⚠',t:'Marine Systems workforce and supply chain constraints below contract build rates — submarine delivery delays are a watch item for 2026-2027'},{icon:'✓',t:'GDIT (IT services) $82.5B GSA Alliant 2 umbrella contract provides steady recurring revenue — stabilizes earnings during hardware cycle troughs'},{icon:'✓',t:'32 consecutive years of dividend increases; strong capital return discipline alongside sustained defense investment'}]},
+  {sym:'NOC',name:'Northrop Grumman',ear:'Q4 2025 · Jan 27 2026',dod:'~84%',backlog:'$95.7B',
+   mets:{rev5y:'+20%',rev1y:'+4%',opMgn:'~10%',roa:'~8%',ndEbitda:'~1.5x',fcf:'+$3.0B',pe:'~17x'},
+   chks:['Rev 5Y: $35B→$42B (+20% — borderline pass)','Rev 1Y: ~+4% FY2025','Op Margin: ~10%','ROA: ~8%','Net Debt/EBITDA: ~1.5x','FCF: ~$3.0B TTM','PE: ~17x (sector discount)'],
+   nextEarnings:'2026-04-23',recentEarnings:'2026-01-27',
+   ins:[{icon:'✓',t:'B-21 Raider stealth bomber: entered Low-Rate Initial Production in 2025, first deliveries expected 2026; program has potential $4.5B acceleration deal'},{icon:'✓',t:'Sentinel ICBM program — sole-source contract for modernizing the land-based leg of the nuclear triad; multi-decade revenue locked in through the 2040s'},{icon:'⚠',t:'Revenue growth is at the borderline (exactly ~20% 5Y): NOC growth is slower due to program maturity; watch for B-21 ramp to accelerate revenue in 2027+'},{icon:'✓',t:'Space Systems segment: Golden Dome missile defense initiative (announced 2026) positions Northrop as a primary beneficiary of next-gen space-based interceptors'},{icon:'⚠',t:'Classified programs mix increasing; higher margin but adds earnings predictability risk — a single program write-down (like LMT in 2024) could materially move EPS'}]},
+  {sym:'LDOS',name:'Leidos Holdings',ear:'Q4 FY26 · Mar 4 2026',dod:'~87%',backlog:'$38B',
+   mets:{rev5y:'+33%',rev1y:'+7%',opMgn:'~8.5%',roa:'~6%',ndEbitda:'~2.0x',fcf:'+$1.5B',pe:'~18x'},
+   chks:['Rev 5Y: $12B→$16B (+33%)','Rev 1Y: ~+7% FY2025','Op Margin: ~8.5%','ROA: ~6%','Net Debt/EBITDA: ~2.0x','FCF: ~$1.5B TTM','PE: ~18x'],
+   nextEarnings:'2026-07-08',recentEarnings:'2026-03-04',
+   ins:[{icon:'✓',t:'Operates the largest IT services contract in defense history — Pentagon\'s NGEN network ($7.7B); mission-critical infrastructure is nearly impossible to displace'},{icon:'✓',t:'AI and autonomy integration: ABMS (Advanced Battle Management System) cloud platform for US Air Force and AUKUS submarine surveillance programs'},{icon:'⚠',t:'Op margin at 8.5% is the thinnest pass in this screen — government services contracts have cost-plus structures that limit margin expansion'},{icon:'✓',t:'87% DoD revenue concentration means revenue is extremely defensible — government IT modernization is a multi-decade secular growth driver'},{icon:'✓',t:'Recently reported Q4 FY26 results (Mar 4, 2026) — beat estimates; raised FY2027 guidance; new $3B+ National Security intelligence contract awarded'}]},
+];
+
+const MIL_FAIL=[
+  {sym:'LHX', name:'L3Harris Technologies',r5:'✗ ~17%',r1:'✓ +8%',opMgn:'✓ ~9%',  roa:'✓ ~5%',nd:'✓ ~2.5x',fcf:'✓ Pos',pe:'✓ ~20x',f:['Rev 5Y ~17% (misses 20% by 3%)']},
+  {sym:'HII', name:'Huntington Ingalls',   r5:'✓ +36%',r1:'✓ +4%', opMgn:'✗ ~6.5%',roa:'✓ ~5%',nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✓ ~15x',f:['Op Margin ~6.5% (<8%) — shipbuilding compression']},
+  {sym:'HWM', name:'Howmet Aerospace',      r5:'✓ +70%',r1:'✓ +18%',opMgn:'✓ ~20%', roa:'✓ ~10%',nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✗ ~45x',f:['PE ~45x exceeds 30x cap']},
+  {sym:'TDG', name:'TransDigm Group',       r5:'✓ +55%',r1:'✓ +15%',opMgn:'✓ ~45%', roa:'✓ High', nd:'✗ ~5x',  fcf:'✓ Pos',pe:'✗ ~35x',f:['Net Debt/EBITDA ~5x (>3.5x)','PE ~35x']},
+  {sym:'SAIC',name:'Science Applications',  r5:'✓ +22%',r1:'✓ +5%', opMgn:'✗ ~7.5%',roa:'✓ ~5%',nd:'✓ ~2.5x',fcf:'✓ Pos',pe:'✓ ~15x',f:['Op Margin ~7.5% (borderline miss)']},
+  {sym:'BAH', name:'Booz Allen Hamilton',   r5:'✗ ~18%',r1:'✓ +12%',opMgn:'✓ ~10%', roa:'✓ ~12%',nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✓ ~22x',f:['Rev 5Y ~18% (close miss)']},
+  {sym:'BA',  name:'Boeing Defense',        r5:'✗ <10%',r1:'✗ Neg', opMgn:'✗ Neg',  roa:'✗ Neg', nd:'✗ High', fcf:'✗ Neg',pe:'✗ Neg', f:['FCF negative','Op Margin negative','Rev declining']},
+  {sym:'KTOS',name:'Kratos Defense',        r5:'✓ >50%',r1:'✓ +20%',opMgn:'✗ ~4%',  roa:'✗ ~2%', nd:'✓ ~1.5x',fcf:'✓ Pos',pe:'✗ ~100x',f:['Op Margin ~4%','ROA ~2%','PE ~100x']},
+  {sym:'AXON',name:'Axon Enterprise',       r5:'✓ >50%',r1:'✓ +30%',opMgn:'✓ ~18%', roa:'✓ High', nd:'✓ Low',  fcf:'✓ Pos',pe:'✗ ~80x', f:['PE ~80x (growth premium)','<40% DoD revenue']},
+  {sym:'CW',  name:'Curtiss-Wright',        r5:'✓ +27%',r1:'✓ +11%',opMgn:'✓ ~17%', roa:'✓ ~8%', nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✗ ~30x', f:['PE ~30-31x (borderline)']},
+  {sym:'AVAV',name:'AeroVironment',         r5:'✓ >50%',r1:'✓ +25%',opMgn:'✓ ~8%',  roa:'✓ ~5%', nd:'✓ Low',  fcf:'✓ Pos',pe:'✗ ~60x', f:['PE ~60x','Small cap']},
+  {sym:'HEI', name:'HEICO Corporation',     r5:'✓ +55%',r1:'✓ +15%',opMgn:'✓ ~18%', roa:'✓ High', nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✗ ~50x', f:['PE ~50x (quality premium)']},
+  {sym:'MRCY',name:'Mercury Systems',       r5:'✓ +45%',r1:'✗ Neg', opMgn:'✗ ~5%',  roa:'✗ Low', nd:'✓ <3x',  fcf:'✗ Neg',pe:'✗ High', f:['Rev 1Y declining','Op Margin <8%','FCF negative']},
+  {sym:'CACI',name:'CACI International',    r5:'✓ +22%',r1:'✓ +8%', opMgn:'✓ ~8%',  roa:'✓ ~5%', nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✓ ~19x', f:['Borderline — re-evaluate next earnings']},
+  {sym:'DRS', name:'Leonardo DRS',          r5:'— Recent IPO',r1:'✓ +15%',opMgn:'✓ ~8%',roa:'✓ ~5%',nd:'✓ ~2x',fcf:'✓ Pos',pe:'✗ ~35x',f:['PE ~35x','IPO 2023 — insufficient 5Y history']},
+];
+
+// ── WEEKLY REVIEW LOGIC ──
+const MIL_REVIEW_KEY='mil-reviewed';
+function milCheckReview(){
+  const bar=$('mil-review-bar'),dot=$('mil-rb-dot'),txt=$('mil-rb-txt'),date=$('mil-rb-date');
+  if(!bar)return;
+  const lastReviewed=localStorage.getItem(MIL_REVIEW_KEY)||null;
+  const now=new Date();
+  // Also check for recent earnings flags
+  const earningsSoon=MIL_PASS.filter(s=>{if(!s.nextEarnings)return false;const d=new Date(s.nextEarnings);return(d-now)/(1000*60*60*24)<=14&&(d-now)>0;});
+  const earningsRecent=MIL_PASS.filter(s=>{if(!s.recentEarnings)return false;const d=new Date(s.recentEarnings);return(now-d)/(1000*60*60*24)<=7;});
+  let daysSince=999;
+  if(lastReviewed){const lr=new Date(lastReviewed);daysSince=(now-lr)/(1000*60*60*24);}
+  if(daysSince>7){
+    dot.className='rb-dot';txt.style.color='var(--mil)';
+    txt.textContent='⚠ Weekly review due — last reviewed: '+(lastReviewed||MIL_REVIEWED_DATE)+' ('+Math.floor(daysSince)+' days ago)';
+    if(date)date.textContent=earningsSoon.length?'Earnings soon: '+earningsSoon.map(s=>s.sym).join(', '):'';
+    bar.style.borderBottomColor='rgba(249,115,22,.4)';
+  } else {
+    dot.className='rb-dot rb-dot-ok';txt.style.color='var(--text)';
+    txt.textContent='Screen up to date · Last reviewed: '+(lastReviewed||MIL_REVIEWED_DATE);
+    bar.classList.add('ok');
+    if(date)date.textContent=earningsSoon.length?'Earnings in next 14 days: '+earningsSoon.map(s=>s.sym).join(', '):'';
+  }
+  // Add badges to cards
+  earningsSoon.forEach(s=>{const c=$('pcc-mil-'+s.sym);if(c){const sym=c.querySelector('.pc-sym');if(sym&&!sym.querySelector('.earnings-badge'))sym.insertAdjacentHTML('beforeend','<span class="earnings-badge eb-soon">Earnings Soon</span>');}});
+  earningsRecent.forEach(s=>{const c=$('pcc-mil-'+s.sym);if(c){const sym=c.querySelector('.pc-sym');if(sym&&!sym.querySelector('.earnings-badge'))sym.insertAdjacentHTML('beforeend','<span class="earnings-badge eb-recent">Recently Reported</span>');}});
+}
+function milMarkReviewed(){
+  const d=new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  localStorage.setItem(MIL_REVIEW_KEY,d);milCheckReview();
+}
+// Auto-flag: every Friday after 4pm ET, show review reminder
+function scheduleMilReview(){
+  const checkFriday=()=>{const n=getETNow();if(n.getDay()===5&&n.getHours()>=16){milCheckReview();}};
+  setInterval(checkFriday,300000); // check every 5 minutes
+}
+
+// ── POST-MARKET NEWS (stocks only) ──
+function buildPmnPills(){
+  const groups=[{sec:'lrv',pass:LRV_PASS},{sec:'buf',pass:BUF_PASS},{sec:'div',pass:DIV_PASS},{sec:'mil',pass:MIL_PASS}];
+  const g=$('pmn-pills');g.innerHTML='';
+  groups.forEach((grp,gi)=>{
+    if(gi>0){const sp=document.createElement('span');sp.className='pill-sep';sp.textContent='|';g.appendChild(sp);}
+    grp.pass.forEach(s=>{
+      const b=document.createElement('button');
+      b.className='t-pill '+grp.sec+'-pill'+(s.sym===pmnTicker?' tp-on':'');
+      b.id='pmn-pill-'+s.sym;
+      b.textContent=s.sym;
+      b.onclick=()=>pmnSelect(s.sym);
+      g.appendChild(b);
+    });
+  });
+}
+
+function pmnSelect(sym){
+  pmnTicker=sym;
+  document.querySelectorAll('.t-pill').forEach(p=>p.classList.toggle('tp-on',p.textContent===sym));
+  fetchPmnNews(sym);
+  // Open section if closed
+  const body=$('pmn-body');if(!body.classList.contains('open')){body.classList.add('open');$('pmn-arr').classList.add('open');}
+}
+
+function fmtPmnDate(ts){const d=new Date(ts*1000);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
+
+async function fetchPmnNews(sym){
+  $('pmn-dot').className='pmn-dot pmn-live';
+  $('pmn-st-txt').textContent='Fetching headlines for '+sym+'…';
+  $('pmn-tm').textContent='Loading: '+sym+' · Auto-runs after 4:00 PM ET · Individual stocks only';
+  $('pmn-feed').innerHTML='<span class="spin"></span> Loading headlines for '+sym+'…';
+  const now=new Date(),from=new Date();from.setDate(from.getDate()-5);
+  const fds=d=>d.toISOString().split('T')[0];
+  try{
+    const news=await apiFetch('/company-news?symbol='+sym+'&from='+fds(from)+'&to='+fds(now));
+    const items=(Array.isArray(news)?news:[]).filter(n=>n.headline&&n.url).slice(0,20);
+    if(!items.length){$('pmn-feed').innerHTML='<div style="font-size:.63rem;color:var(--muted);padding:.5rem 0">No headlines found in the last 5 days for '+sym+'.</div>';}
+    else{
+      $('pmn-feed').innerHTML='<div style="font-size:.58rem;color:var(--muted);margin-bottom:.65rem">'+items.length+' headlines for '+sym+' · as of '+new Date().toLocaleTimeString('en-US',{timeZone:'America/New_York',hour12:true})+' ET</div>'
+        +'<div class="news-grid">'+items.map(n=>'<div class="news-row"><div class="news-meta"><span class="news-ts">'+fmtPmnDate(n.datetime)+'</span><a class="news-src" href="'+n.url+'" target="_blank" rel="noopener">'+n.source+'</a></div><a class="news-hl" href="'+n.url+'" target="_blank" rel="noopener">'+n.headline+'</a></div>').join('')+'</div>';
+    }
+    $('pmn-st-txt').textContent='Loaded: '+sym+' · '+items.length+' headlines';
+    $('pmn-tm').textContent='Showing: '+sym+' · Updated '+new Date().toLocaleTimeString('en-US',{timeZone:'America/New_York',hour12:true})+' ET · Auto-runs after 4:00 PM ET';
+  }catch(e){$('pmn-feed').innerHTML='<div style="font-size:.63rem;color:var(--red)">Error: '+e.message+'</div>';$('pmn-st-txt').textContent='Error fetching news';}
+  $('pmn-dot').className='pmn-dot pmn-off';
+}
+
+function pmnFetchNow(){fetchPmnNews(pmnTicker);}
+
+function getETNow(){return new Date(new Date().toLocaleString('en-US',{timeZone:'America/New_York'}));}
+function isAfterClose(){const n=getETNow(),h=n.getHours(),d=n.getDay();return d===0||d===6||h>=16;}
+function msUntilClose(){const n=getETNow();const c=new Date(n);c.setHours(16,0,0,0);if(n>=c)c.setDate(c.getDate()+1);while(c.getDay()===0||c.getDay()===6)c.setDate(c.getDate()+1);return c-n;}
+function fmtCountdown(ms){if(ms<=0)return'now';const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000);return h>0?h+'h '+m+'m':m+'m';}
+
+function pmnUpdateStatus(){
+  const nxt=$('pmn-next');
+  if(isAfterClose()){$('pmn-dot').className='pmn-dot pmn-live';if(nxt)nxt.textContent='Market closed · auto-fetch ready';}
+  else{$('pmn-dot').className='pmn-dot pmn-sched';if(nxt)nxt.textContent='Auto-fetch in '+fmtCountdown(msUntilClose());}
+}
+
+function schedulePmn(){
+  pmnUpdateStatus();
+  setInterval(()=>{if(!isAfterClose())pmnUpdateStatus();},60000);
+  if(pmnTimer)clearTimeout(pmnTimer);
+  if(isAfterClose()){
+    const today=new Date().toDateString();
+    if(sessionStorage.getItem('pmn-run')!==today){
+      sessionStorage.setItem('pmn-run',today);
+      setTimeout(()=>{
+        const body=$('pmn-body');if(!body.classList.contains('open')){body.classList.add('open');$('pmn-arr').classList.add('open');}
+        fetchPmnNews(pmnTicker);
+      },800);
+    }
+    pmnTimer=setTimeout(()=>{sessionStorage.setItem('pmn-run',new Date().toDateString());fetchPmnNews(pmnTicker);schedulePmn();},msUntilClose());
+  } else {
+    pmnTimer=setTimeout(()=>{
+      sessionStorage.setItem('pmn-run',new Date().toDateString());
+      const body=$('pmn-body');if(!body.classList.contains('open')){body.classList.add('open');$('pmn-arr').classList.add('open');}
+      fetchPmnNews(pmnTicker);schedulePmn();
+    },msUntilClose());
+  }
+}
+
+// ── LOAD QUOTES ──
+function patchCard(sym,price,pct,sec){
+  const c=$('pcc-'+sec+'-'+sym);if(!c)return;
+  const pp=c.querySelector('.pc-price'),pch=c.querySelector('.pc-chg');
+  if(pp)pp.textContent='$'+ff(price);
+  if(pch)pch.innerHTML='<span class="'+cc(pct)+'">'+ar(pct)+fp(pct)+'</span>';
+}
+
+async function loadIdx(){await Promise.all(['SCHD','SPY','VOO','VTI'].map(async sym=>{try{const q=await apiFetch('/quote?symbol='+sym);if(!q||!q.c)return;const pct=(q.c-q.pc)/q.pc*100;const pe=$('ix-'+sym+'-p'),ce=$('ix-'+sym+'-c');if(pe)pe.textContent='$'+ff(q.c);if(ce)ce.innerHTML='<span class="'+cc(pct)+'">'+ar(pct)+fp(pct)+'</span>';}catch(e){}}))}
+async function loadMkt(){try{const d=await apiFetch('/stock/market-status?exchange=US');const el=$('s-mkt'),dt=$('dot');if(d.isOpen){el.textContent='Market Open';el.className='open';dt.className='dot dp';}else{el.textContent='Market Closed';el.className='closed';dt.className='dot dr';}}catch(e){}}
+
+async function loadQuotes(){
+  const syms=[...new Set([...LRV_PASS,...LRV_FAIL,...BUF_PASS,...BUF_FAIL,...DIV_PASS,...DIV_FAIL,...MIL_PASS,...MIL_FAIL].map(s=>s.sym))];
+  let ok=0,fail=0;$('s-loaded').innerHTML='<span class="spin"></span> Loading '+syms.length+' quotes...';
+  await Promise.all(syms.map(async sym=>{
+    try{
+      const q=await apiFetch('/quote?symbol='+sym);if(!q||q.c===0||q.c===undefined)throw new Error();
+      quotes[sym]=q;ok++;
+      const pct=(q.c-q.pc)/q.pc*100;
+      ['lrv','buf','div','mil'].forEach(sec=>patchCard(sym,q.c,pct,sec));
+      buildFail(LRV_FAIL,'lrv-fb','lrv');buildFail(BUF_FAIL,'buf-fb','buf');buildFail(DIV_FAIL,'div-fb','div');buildFail(MIL_FAIL,'mil-fb','mil');
+    }catch(e){fail++;}
+  }));
+  $('s-loaded').textContent=fail>0?ok+'/'+syms.length+' loaded · '+fail+' failed':ok+' stocks loaded ✓';
+  $('s-time').textContent=new Date().toLocaleTimeString();
+  if(ok===0)showBanner('✗ All quotes failed — CORS issue. Serve: <code>python3 -m http.server 8080</code> → <a href="http://localhost:8080/finnhub-dashboard.html">localhost:8080</a>');
+}
+
+function openWS(){if(ws){try{ws.close();}catch(e){}}try{ws=new WebSocket('wss://ws.finnhub.io?token='+KEY);ws.onopen=()=>{$('ws-st').textContent='Connected';$('ws-st').style.color='var(--green)';[...LRV_PASS,...BUF_PASS,...DIV_PASS,...MIL_PASS].forEach(s=>ws.send(JSON.stringify({type:'subscribe',symbol:s.sym})));};ws.onclose=()=>{$('ws-st').textContent='Offline';$('ws-st').style.color='var(--muted)';};ws.onerror=()=>{};ws.onmessage=ev=>{try{const msg=JSON.parse(ev.data);if(msg.type!=='trade'||!msg.data)return;msg.data.forEach(tr=>{const sym=tr.s,price=tr.p;if(!quotes[sym]||!price)return;const old=quotes[sym].c;quotes[sym].c=price;const pct=(price-quotes[sym].pc)/quotes[sym].pc*100;['lrv','buf','div','mil'].forEach(sec=>{patchCard(sym,price,pct,sec);const c=$('pcc-'+sec+'-'+sym);if(c){c.style.background=price>old?'rgba(74,222,128,.07)':'rgba(248,113,113,.07)';setTimeout(()=>{c.style.background='';},700);}});['lrv','buf','div','mil'].forEach(sec=>{if(selSym[sec]===sym){$(sec+'-pr').textContent='$'+ff(price);$(sec+'-ch').innerHTML='<span class="'+cc(pct)+'">'+ar(pct)+fp(pct)+'</span>';}});});}catch(e){}}}catch(e){}}
+
+async function initDash(){
+  $('banner').style.display='none';quotes={};
+  buildCards(LRV_PASS,'lrv-pg','lrv');buildCards(BUF_PASS,'buf-pg','buf');buildCards(DIV_PASS,'div-pg','div');buildCards(MIL_PASS,'mil-pg','mil');
+  buildFail(LRV_FAIL,'lrv-fb','lrv');buildFail(BUF_FAIL,'buf-fb','buf');buildFail(DIV_FAIL,'div-fb','div');buildFail(MIL_FAIL,'mil-fb','mil');
+  buildPmnPills();loadMkt();loadIdx();await loadQuotes();openWS();schedulePmn();milCheckReview();scheduleMilReview();
+}
+
+// ── DARK / LIGHT MODE ──
+function toggleMode(){
+  const isLight=document.body.classList.toggle('light');
+  const btn=$('mode-btn');
+  btn.textContent=isLight?'Dark':'Light';
+  localStorage.setItem('jonas-theme',isLight?'light':'dark');
+}
+(function(){const t=localStorage.getItem('jonas-theme');if(t==='light'){document.body.classList.add('light');const b=$('mode-btn');if(b)b.textContent='Dark';}})();
+
+// ── DUAL CLOCKS ──
+function tickClocks(){
+  const now=new Date();
+  const et=now.toLocaleTimeString('en-US',{timeZone:'America/New_York',hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const local=now.toLocaleTimeString([],{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const elET=$('clock-et'),elLocal=$('clock-local');
+  if(elET)elET.textContent=et;
+  if(elLocal)elLocal.textContent=local;
+}
+setInterval(tickClocks,1000);tickClocks();
+
+buildPmnPills();initDash();
+</script>
+</body>
+</html>
