@@ -339,7 +339,7 @@ footer{border-top:1px solid var(--border);padding-top:.9rem;margin-top:1.5rem;fo
       <span class="ti" style="color:var(--div-col)">◆</span>
       <div>
         <div class="tt">Dividend Growth Stocks</div>
-        <div class="tm">Div Yield &gt;1.5% · Div Growth 5Y+ · Rev Gr 5Y &gt;20% · ROE &gt;15% · D/E &lt;1 · FCF &gt;0 · Payout &lt;70% · Top 500 US mkt cap · Ranked by yield · 5 pass / 15 near-miss</div>
+        <div class="tm">Div Yield &gt;1.5% · Div Growth 5Y+ · Rev Gr 5Y &gt;20% · ROE &gt;15% · D/E &lt;1 · FCF &gt;0 · Payout &lt;70% · Top 500 US mkt cap · Ranked by yield · 5 pass / 16 near-miss</div>
       </div>
     </div>
     <span class="ta" id="div-arr">▼</span>
@@ -350,6 +350,7 @@ footer{border-top:1px solid var(--border);padding-top:.9rem;margin-top:1.5rem;fo
     </div>
     <div class="sec-inner">
       <div style="font-size:.59rem;color:var(--muted);margin-bottom:.75rem">✓ 5 stocks pass all 7 dividend criteria · ranked by yield descending · growing companies with strong, sustainable dividends · click any card for insights</div>
+      <div style="font-size:.59rem;color:var(--muted);margin-bottom:.75rem">Evaluated: STRC (Starco Brands) — fails 5 of 7 criteria · see near-miss table below for full breakdown</div>
       <div class="pg" id="div-pg"></div>
       <div class="det" id="div-det">
         <div class="dh"><div><div class="dsym" id="div-sym">—</div><div class="dname" id="div-nm">—</div></div><div class="dpb"><div class="dpr" id="div-pr">—</div><div class="dchg" id="div-ch">—</div><div class="dohlc" id="div-oh">—</div></div></div>
@@ -357,51 +358,45 @@ footer{border-top:1px solid var(--border);padding-top:.9rem;margin-top:1.5rem;fo
         <div class="insights" id="div-ins"></div>
         <div class="nw"><div class="nh div-nh">Recent News</div><div id="div-nw"><span class="spin"></span></div></div>
       </div>
-      <div class="fl">↓ Top 15 Near-Misses · Sorted by Closeness to Passing</div>
+      <div class="fl">↓ Top 16 Near-Misses · Sorted by Closeness to Passing</div>
       <table class="ft"><thead><tr><th>Ticker</th><th>Price</th><th>1D</th><th>Div Yield</th><th>Div Gr 5Y</th><th>Rev Gr 5Y</th><th>ROE</th><th>D/E</th><th>FCF</th><th>Payout</th><th>Fail Reason(s)</th></tr></thead><tbody id="div-fb"></tbody></table>
     </div>
   </div>
 </div>
 
-<!-- ═══ MILITARY CONTRACTS SCREEN ═══ -->
+<!-- ═══ DEEP VALUE + HIGH GROWTH ═══ -->
 <div class="sec-wrap">
   <button class="sec-toggle mil-tog" onclick="tog('mil')">
     <div class="tl">
-      <span class="ti" style="color:var(--mil)">⬟</span>
+      <span class="ti" style="color:var(--mil)">▲</span>
       <div>
-        <div class="tt">U.S. Military Contract Companies</div>
-        <div class="tm">Rev Gr 5Y &gt;20% · Rev Gr 1Y &gt;4% · Op Margin &gt;8% · ROA &gt;4% · Net Debt/EBITDA &lt;3.5x · FCF &gt;0 · PE &lt;30 · DoD Revenue &gt;40% · 5 pass / 15 near-miss · Reviewed weekly</div>
+        <div class="tt">Deep Value + High Growth</div>
+        <div class="tm">Shr Price &lt;$25 · Rev Gr 5Y &gt;80% · Rev Gr 1Y &gt;15% · P/S &lt;6 · Gross Margin &gt;35% · D/E &lt;0.75 · Mkt Cap $500M–$15B · 5 pass / 15 near-miss</div>
       </div>
     </div>
     <span class="ta" id="mil-arr">▼</span>
   </button>
   <div class="sec-body" id="mil-body">
-    <div id="mil-review-bar" class="review-banner">
-      <span class="rb-dot" id="mil-rb-dot"></span>
-      <span class="rb-txt" id="mil-rb-txt">Checking review status...</span>
-      <span class="rb-date" id="mil-rb-date"></span>
-      <button class="review-btn" onclick="milMarkReviewed()">✓ Mark Reviewed</button>
-    </div>
     <div class="crit-bar">
-      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Rev Gr 5Y &gt;20%</span>
-      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Rev Gr 1Y &gt;4%</span>
-      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Op Margin &gt;8%</span>
-      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">ROA &gt;4%</span>
-      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Net Debt/EBITDA &lt;3.5x</span>
-      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">FCF &gt;0</span>
-      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">PE &lt;30</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Shr Price &lt;$25</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Rev Gr 5Y &gt;80%</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Rev Gr 1Y &gt;15%</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">P/S &lt;6</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Gross Margin &gt;35%</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">D/E &lt;0.75</span>
+      <span class="crit" style="border-color:rgba(249,115,22,.35);color:var(--mil);background:rgba(249,115,22,.06)">Mkt Cap $500M–$15B</span>
     </div>
     <div class="sec-inner">
-      <div style="font-size:.59rem;color:var(--sub);margin-bottom:.75rem">✓ 5 stocks pass all 7 criteria · Metrics adapted for long-cycle government contracting · Screener reviewed every Friday · click any card for insights</div>
+      <div style="font-size:.59rem;color:var(--sub);margin-bottom:.75rem">✓ 5 stocks pass all 7 criteria · Low share price (&lt;$25) with modest P/S and strong multi-year growth momentum · Criteria designed for lower-risk tolerance · click any card for insights</div>
       <div class="pg" id="mil-pg"></div>
       <div class="det" id="mil-det">
         <div class="dh"><div><div class="dsym" id="mil-sym">—</div><div class="dname" id="mil-nm">—</div></div><div class="dpb"><div class="dpr" id="mil-pr">—</div><div class="dchg" id="mil-ch">—</div><div class="dohlc" id="mil-oh">—</div></div></div>
         <div class="mg" id="mil-mt"></div>
         <div class="insights" id="mil-ins"></div>
-        <div class="nw"><div class="nh mil-nh">Recent News & Contract Activity</div><div id="mil-nw"><span class="spin"></span></div></div>
+        <div class="nw"><div class="nh mil-nh">Recent News &amp; Catalysts</div><div id="mil-nw"><span class="spin"></span></div></div>
       </div>
       <div class="fl">↓ Top 15 Near-Misses · Sorted by Closeness to Passing</div>
-      <table class="ft"><thead><tr><th>Ticker</th><th>Price</th><th>1D</th><th>Rev 5Y</th><th>Rev 1Y</th><th>Op Margin</th><th>ROA</th><th>ND/EBITDA</th><th>FCF</th><th>PE</th><th>Fail Reason(s)</th></tr></thead><tbody id="mil-fb"></tbody></table>
+      <table class="ft"><thead><tr><th>Ticker</th><th>Live Price</th><th>1D</th><th>Shr Price</th><th>Rev 5Y</th><th>Rev 1Y</th><th>P/S</th><th>Gr. Margin</th><th>D/E</th><th>Mkt Cap</th><th>Fail Reason(s)</th></tr></thead><tbody id="mil-fb"></tbody></table>
     </div>
   </div>
 </div>
@@ -429,7 +424,7 @@ footer{border-top:1px solid var(--border);padding-top:.9rem;margin-top:1.5rem;fo
         <span style="color:var(--accent)">⬡ Low Risk Value</span> &nbsp;·&nbsp;
         <span style="color:var(--gold)">◈ Buffett</span> &nbsp;·&nbsp;
         <span style="color:var(--div-col)">◆ Dividend</span> &nbsp;·&nbsp;
-        <span style="color:var(--mil)">⬟ Military</span>
+        <span style="color:var(--mil)">▲ Deep Value + High Growth</span>
       </div>
       <div class="ticker-select-grid" id="pmn-pills"></div>
       <div id="pmn-feed"><div style="font-size:.63rem;color:var(--muted);padding:.5rem 0">Select a ticker above to load post-market headlines. Auto-fetches daily after 4:00 PM ET.</div></div>
@@ -438,7 +433,7 @@ footer{border-top:1px solid var(--border);padding-top:.9rem;margin-top:1.5rem;fo
 </div>
 
 <footer>
-  <span>Data: Finnhub.io · Low Risk Value · Buffett · Dividend Growth · March 2026</span>
+  <span>Data: Finnhub.io · Low Risk Value · Buffett · Dividend Growth · Deep Value + High Growth · March 2026</span>
   <span>For informational purposes only · Not financial advice · Made by Jonas Flynn</span>
 </footer>
 </div>
@@ -541,7 +536,7 @@ const DIV_PASS=[
    ins:[{icon:'✓',t:'Q2 FY26: record bookings $22.1B (41 clients with >$100M quarter) — raised full-year revenue guidance; 10% dividend increase signals management confidence'},{icon:'✓',t:'Lowest payout ratio in the screen at 38% with 15% dividend CAGR — best combination of growth safety and headroom for future raises'},{icon:'⚠',t:'Revenue growth 4% in local currency (8% USD) — solid but slower than peak; US Federal government business declining as DOGE cuts bite'},{icon:'✓',t:'85,000+ AI and data professionals; $5B in planned FY26 acquisitions including AI-native capabilities — implementation layer for enterprise AI'},{icon:'⚠',t:'Stock down ~38% from 52-week high on investor concern about DOGE-driven federal IT budget cuts — creates potential re-rating opportunity'}]},
 ];
 
-// ── DIVIDEND NEAR-MISSES (15) ──
+// ── DIVIDEND NEAR-MISSES (16) ──
 const DIV_FAIL=[
   {sym:'UNH', name:'UnitedHealth Group',dy:'✗ ~2.4%',dg:'✓ 14% CAGR',r5:'✓ +56%',roe:'✗ Declining',de:'✓ ~0.70',fcf:'✓ Pos',po:'✓ ~27%',f:['EPS -65% Q4 2025 YoY','Rev DECLINING in 2026 (first in 40yr)','DOJ criminal/civil investigation','ROE deteriorating rapidly']},
   {sym:'AVGO',name:'Broadcom',       dy:'✗ 0.81%',dg:'✓ 12% CAGR',r5:'✓ >20%',roe:'✓ 33%',de:'✓ 0.83',fcf:'✓ Pos',po:'✓ 46%',f:['Yield 0.81% (<1.5%)']},
@@ -558,7 +553,7 @@ const DIV_FAIL=[
   {sym:'HD',  name:"Home Depot",      dy:'✓ 2.4%', dg:'✓ 11% CAGR',r5:'✓ +24%',roe:'✓ High',de:'✗ Neg', fcf:'✓ Pos',po:'✓ 55%',f:['D/E negative equity (buybacks)']},
   {sym:'NKE', name:'Nike',            dy:'✓ 2.2%', dg:'✓ 10% CAGR',r5:'✓ +24%',roe:'✓ ~40%',de:'✓ 0.70',fcf:'✓ Pos',po:'✓ 60%',f:['Rev 1Y declining FY2025']},
   {sym:'AMGN',name:'Amgen',           dy:'✓ 3.6%', dg:'✓ 10% CAGR',r5:'✓ >20%',roe:'✓ High',de:'✗ Very high',fcf:'✓ Pos',po:'✓ 50%',f:['D/E very high (Horizon acq.)']},
-  {sym:'ABT', name:'Abbott Labs',     dy:'✓ 2.0%', dg:'✓ 7% CAGR', r5:'✗ ~15%',roe:'✗ ~17%',de:'✓ 0.32',fcf:'✓ Pos',po:'✓ 42%',f:['Rev 5Y ~15%','ROE ~17% (<15% wait)']},
+  {sym:'STRC',name:'Starco Brands',    dy:'✗ ~0%',  dg:'✗ None',    r5:'✓ >30%',roe:'✗ Neg',   de:'✗ >1',      fcf:'✗ Neg',po:'— N/A',  f:['No dividend (yield ~0%)','No 5Y dividend growth history','ROE negative','D/E >1 (acquisition leverage)','FCF negative']},
 ];
 
 let quotes={}, selSym={lrv:null,buf:null,div:null,mil:null}, ws=null, pmnTicker='NVDA', pmnTimer=null;
@@ -589,8 +584,8 @@ function buildCards(data,gridId,sec){
     d.onclick=()=>openDetail(s.sym,sec);
     const ph=!q?'<span class="sk" style="width:62px;height:16px"></span>':'$'+ff(q.c);
     const ch=!q?'<span class="sk" style="width:50px;height:9px;margin-top:4px"></span>':pct!=null?'<span class="'+cc(pct)+'">'+ar(pct)+fp(pct)+'&nbsp;'+(q.c>=q.pc?'+':'')+' $'+ff(q.c-q.pc)+'</span>':'—';
-    // For dividend screen, show yield prominently
-    const extra=sec==='div'?'<div class="rank-badge">#'+s.rank+' by yield</div><div class="yield-big">'+s.mets.yield+'</div>':'';
+    // For dividend screen, show yield prominently; for deep value screen, show price and growth
+    const extra=sec==='div'?'<div class="rank-badge">#'+s.rank+' by yield</div><div class="yield-big">'+s.mets.yield+'</div>':sec==='mil'?'<div class="rank-badge">Price: '+s.mets.price+'</div><div class="yield-big" style="color:var(--mil)">'+s.mets.rev5y+' 5Y Growth</div>':'';
     d.innerHTML='<div class="badge '+sec+'-badge">✓ passes all 7</div>'+(extra)
       +'<div class="pc-sym">'+s.sym+'</div><div class="pc-name">'+s.name+'</div>'
       +'<div class="pc-price">'+ph+'</div><div class="pc-chg">'+ch+'</div>'
@@ -610,7 +605,7 @@ function buildFail(data,tid,sec){
     let cells='';
     if(sec==='lrv') cells='<td class="'+okCls(s.r5)+'">'+s.r5+'</td><td class="'+okCls(s.r1)+'">'+s.r1+'</td><td class="'+okCls(s.eg)+'">'+s.eg+'</td><td class="'+okCls(s.roe)+'">'+s.roe+'</td><td class="'+okCls(s.de)+'">'+s.de+'</td><td class="'+okCls(s.fcf)+'">'+s.fcf+'</td><td class="'+okCls(s.pg)+'">'+s.pg+'</td>';
     else if(sec==='buf') cells='<td class="'+okCls(s.pe)+'">'+s.pe+'</td><td class="'+okCls(s.pb)+'">'+s.pb+'</td><td class="'+okCls(s.roe)+'">'+s.roe+'</td><td class="'+okCls(s.de)+'">'+s.de+'</td><td class="'+okCls(s.fcf)+'">'+s.fcf+'</td><td class="'+okCls(s.div)+'">'+s.div+'</td><td class="'+okCls(s.r5)+'">'+s.r5+'</td>';
-    else if(sec==='mil') cells='<td class="'+okCls(s.r5)+'">'+s.r5+'</td><td class="'+okCls(s.r1)+'">'+s.r1+'</td><td class="'+okCls(s.opMgn)+'">'+s.opMgn+'</td><td class="'+okCls(s.roa)+'">'+s.roa+'</td><td class="'+okCls(s.nd)+'">'+s.nd+'</td><td class="'+okCls(s.fcf)+'">'+s.fcf+'</td><td class="'+okCls(s.pe)+'">'+s.pe+'</td>';
+    else if(sec==='mil') cells='<td class="'+okCls(s.pr)+'">'+s.pr+'</td><td class="'+okCls(s.r5)+'">'+s.r5+'</td><td class="'+okCls(s.r1)+'">'+s.r1+'</td><td class="'+okCls(s.ps)+'">'+s.ps+'</td><td class="'+okCls(s.gm)+'">'+s.gm+'</td><td class="'+okCls(s.de)+'">'+s.de+'</td><td class="'+okCls(s.mc)+'">'+s.mc+'</td>';
     else cells='<td class="'+okCls(s.dy)+'">'+s.dy+'</td><td class="'+okCls(s.dg)+'">'+s.dg+'</td><td class="'+okCls(s.r5)+'">'+s.r5+'</td><td class="'+okCls(s.roe)+'">'+s.roe+'</td><td class="'+okCls(s.de)+'">'+s.de+'</td><td class="'+okCls(s.fcf)+'">'+s.fcf+'</td><td class="'+okCls(s.po)+'">'+s.po+'</td>';
     return '<tr><td><span class="fsym">'+s.sym+'</span><span class="fname">'+s.name+'</span></td><td>'+ps+'</td><td>'+cs+'</td>'+cells+'<td>'+fb+'</td></tr>';
   }).join('');
@@ -624,7 +619,7 @@ async function openDetail(sym,sec){
   const s=data.find(x=>x.sym===sym);
   const q=quotes[sym],pct=q&&q.pc?(q.c-q.pc)/q.pc*100:0;
   $(sec+'-sym').textContent=sym;
-  const milExtra=sec==='mil'&&s?` · DoD: ${s.dod} · Backlog: ${s.backlog}`:'';
+  const milExtra=sec==='mil'&&s?` · Mkt Cap: ${s.mktCap}`:'';
   $(sec+'-nm').textContent=(s?.name||'')+' · '+(s?.ear||'')+milExtra;
   $(sec+'-pr').textContent=q?'$'+ff(q.c):'—';
   $(sec+'-ch').innerHTML=q?'<span class="'+cc(pct)+'">'+ar(pct)+fp(pct)+'&nbsp;'+(q.c>=q.pc?'+':'')+' $'+ff(q.c-q.pc)+'</span>':'—';
@@ -643,7 +638,7 @@ async function openDetail(sym,sec){
   // Fetch live metrics
   try{const m=await apiFetch('/stock/metric?symbol='+sym+'&metric=all');const mt=m?.metric||{};
     const base=[['52W High',mt['52WeekHigh']?'$'+ff(mt['52WeekHigh']):'—'],['52W Low',mt['52WeekLow']?'$'+ff(mt['52WeekLow']):'—'],['P/E TTM',ff(mt['peBasicExclExtraTTM'],1)],['P/B',ff(mt['pbAnnual'],2)],['EPS TTM',mt['epsBasicExclExtraTTM']?'$'+ff(mt['epsBasicExclExtraTTM']):'—'],['Rev Gr 1Y',mt['revenueGrowthTTMYoy']!=null?fp(mt['revenueGrowthTTMYoy']*100):'—'],['EPS Gr 1Y',mt['epsGrowthTTMYoy']!=null?fp(mt['epsGrowthTTMYoy']*100):'—'],['ROE',mt['roeRfy']!=null?ff(mt['roeRfy'],1)+'%':'—'],['Debt/Eq',ff(mt['totalDebt/totalEquityAnnual'],2)],['PEG',ff(mt['pegNormalizedAnnual'],2)],['Mkt Cap',mt['marketCapitalization']?'$'+ff(mt['marketCapitalization']/1e3,1)+'B':'—'],['FCF/Shr',mt['freeCashFlowPerShareTTM']?'$'+ff(mt['freeCashFlowPerShareTTM']):'—'],['Div Yield',mt['dividendYieldIndicatedAnnual']!=null?ff(mt['dividendYieldIndicatedAnnual'],2)+'%':'—'],['Beta',ff(mt['beta'],2)]];
-    const milExtra=sec==='mil'?[['Op Margin',mt['operatingProfitMarginTTM']!=null?ff(mt['operatingProfitMarginTTM']*100,1)+'%':'—'],['ROA',mt['roaTTM']!=null?ff(mt['roaTTM']*100,1)+'%':'—']]:[];
+    const milExtra=sec==='mil'?[['P/S',mt['psTTM']!=null?ff(mt['psTTM'],2)+'x':'—'],['Gr. Margin',mt['grossMarginTTM']!=null?ff(mt['grossMarginTTM']*100,1)+'%':'—']]:[];
     const rows=[...base,...milExtra];
     $(sec+'-mt').innerHTML=rows.map(([l,v])=>'<div class="mc"><div class="ml">'+l+'</div><div class="mv">'+v+'</div></div>').join('');
   }catch(e){$(sec+'-mt').innerHTML='<div class="mc" style="grid-column:1/-1"><div class="ml" style="color:var(--red)">'+e.message+'</div></div>';}
@@ -652,92 +647,54 @@ async function openDetail(sym,sec){
   try{const now=new Date(),wk=new Date();wk.setDate(wk.getDate()-7);const fds=d=>d.toISOString().split('T')[0];const news=await apiFetch('/company-news?symbol='+sym+'&from='+fds(wk)+'&to='+fds(now));const items=(Array.isArray(news)?news:[]).slice(0,5);$(sec+'-nw').innerHTML=items.length?items.map(n=>'<div class="ni"><div class="nt">'+fdate(n.datetime)+'</div><div><a class="na" href="'+n.url+'" target="_blank" rel="noopener">'+n.headline+'</a><div class="ns">'+n.source+'</div></div></div>').join(''):'<span style="color:var(--muted);font-size:.63rem">No news in past 7 days</span>';}catch(e){$(sec+'-nw').innerHTML='<span style="color:var(--red);font-size:.63rem">'+e.message+'</span>';}
 }
 
-// ── MILITARY CONTRACT SCREEN DATA ──
-// Metrics: Rev5Y >20% | Rev1Y >4% | Op Margin >8% | ROA >4% | NetDebt/EBITDA <3.5x | FCF >0 | PE <30
-// Reviewed: March 14, 2026 — update every Friday after close
-const MIL_REVIEWED_DATE = 'March 14, 2026';
+// ── DEEP VALUE + HIGH GROWTH PASSES ──
+// Criteria: Shr Price <$25 | Rev Gr 5Y >80% | Rev Gr 1Y >15% | P/S <6 | Gross Margin >35% | D/E <0.75 | Mkt Cap $500M–$15B
+// Note: MIL_PASS/MIL_FAIL/mil-* identifiers are intentionally retained for backwards compatibility with all existing DOM, style, and JS references in this file.
 const MIL_PASS=[
-  {sym:'LMT',name:'Lockheed Martin',ear:'Q4 2025 · Jan 29 2026',dod:'~73%',backlog:'$194B',
-   mets:{rev5y:'+34%',rev1y:'+6%',opMgn:'~11.3%',roa:'~13%',ndEbitda:'~1.2x',fcf:'+$6.9B',pe:'~17x'},
-   chks:['Rev 5Y: $56B→$75B (+34%)','Rev 1Y: +6% FY2025','Op Margin: ~11.3%','ROA: ~13% (negative equity from buybacks)','Net Debt/EBITDA: ~1.2x','FCF: $6.9B FY2025 (+31% YoY)','PE: ~17x (below defense sector avg of ~23x)'],
-   nextEarnings:'2026-04-22',recentEarnings:'2026-01-29',
-   ins:[{icon:'✓',t:'Record $194B backlog — 2.5+ years of production capacity locked in; $179B at start of 2026 highlighted by CEO as "unprecedented demand"'},{icon:'✓',t:'F-35 program: 191 jets delivered in 2025, lots 18-19 contracts cover 296 more jets; international orders from Poland, Japan, Finland expanding'},{icon:'⚠',t:'$1.6B pre-tax loss on classified programs in 2024; program risks remain elevated for next-gen stealth and hypersonic development'},{icon:'✓',t:'Patriot PAC-3 surge: largest-ever $9.8B interceptor contract Sep 2025; ramping production from 600 to 2,000 missiles/year over 7 years'},{icon:'⚠',t:'Capital allocation shifting: R&D+capex rising 35% to $5B in 2026, reducing near-term FCF but investing in capacity for Golden Dome and FA-XX'}]},
-  {sym:'RTX',name:'RTX Corporation',ear:'Q4 2025 · Jan 28 2026',dod:'~55%',backlog:'$268B',
-   mets:{rev5y:'+40%',rev1y:'+10%',opMgn:'~10.5%',roa:'~6.5%',ndEbitda:'~2.5x',fcf:'+$7.5B',pe:'~22x'},
-   chks:['Rev 5Y: $57B→$80B (+40%)','Rev 1Y: +10% including Q4 at +9.7%','Op Margin: ~10.5% (improving)','ROA: ~6.5%','Net Debt/EBITDA: ~2.5x','FCF: ~$7.5B TTM','PE: ~22x'],
-   nextEarnings:'2026-04-23',recentEarnings:'2026-01-28',
-   ins:[{icon:'✓',t:'Record $268B backlog — Raytheon segment book-to-bill of 2.27x in Q3 2025 means new orders were doubling shipments; demand is structural'},{icon:'✓',t:'Patriot system dominance: $1.7B Spain order, $50B DLA sustainment contract through 2045; AMRAAM production doubled to 1,200/year'},{icon:'✓',t:'Collins Aerospace and Pratt & Whitney commercial recovery adds diversification: P&W commercial aftermarket +23%, Collins +13% in Q3 2025'},{icon:'⚠',t:'GTF engine powder metal issue remediation ongoing through 2026 — still pulling ~1,200 Pratt engines for inspection; manageable but adds cost'},{icon:'✓',t:'NATO rearmament is a decade-long tailwind: 32 NATO members committed to increasing to 3.5% of GDP by 2035, primarily buying American systems'}]},
-  {sym:'GD',name:'General Dynamics',ear:'Q4 2025 · Jan 29 2026',dod:'~77%',backlog:'$109B',
-   mets:{rev5y:'+26%',rev1y:'+10%',opMgn:'~11.5%',roa:'~8%',ndEbitda:'~1.5x',fcf:'+$3.5B',pe:'~19x'},
-   chks:['Rev 5Y: $37.9B→$47.7B (+26%)','Rev 1Y: ~+10% FY2025','Op Margin: ~11.5%','ROA: ~8%','Net Debt/EBITDA: ~1.5x','FCF: ~$3.5B TTM','PE: ~19x'],
-   nextEarnings:'2026-04-28',recentEarnings:'2026-01-29',
-   ins:[{icon:'✓',t:'$109.8B backlog with 2.2x book-to-bill in Q3 2025 — Virginia-class submarine program is a multi-decade sole-source contract'},{icon:'✓',t:'Gulfstream G700/G800 ramp underway: 8+ year backlog in business aviation; military variant demand from heads of state and special operations'},{icon:'⚠',t:'Marine Systems workforce and supply chain constraints below contract build rates — submarine delivery delays are a watch item for 2026-2027'},{icon:'✓',t:'GDIT (IT services) $82.5B GSA Alliant 2 umbrella contract provides steady recurring revenue — stabilizes earnings during hardware cycle troughs'},{icon:'✓',t:'32 consecutive years of dividend increases; strong capital return discipline alongside sustained defense investment'}]},
-  {sym:'NOC',name:'Northrop Grumman',ear:'Q4 2025 · Jan 27 2026',dod:'~84%',backlog:'$95.7B',
-   mets:{rev5y:'+20%',rev1y:'+4%',opMgn:'~10%',roa:'~8%',ndEbitda:'~1.5x',fcf:'+$3.0B',pe:'~17x'},
-   chks:['Rev 5Y: $35B→$42B (+20% — borderline pass)','Rev 1Y: ~+4% FY2025','Op Margin: ~10%','ROA: ~8%','Net Debt/EBITDA: ~1.5x','FCF: ~$3.0B TTM','PE: ~17x (sector discount)'],
-   nextEarnings:'2026-04-23',recentEarnings:'2026-01-27',
-   ins:[{icon:'✓',t:'B-21 Raider stealth bomber: entered Low-Rate Initial Production in 2025, first deliveries expected 2026; program has potential $4.5B acceleration deal'},{icon:'✓',t:'Sentinel ICBM program — sole-source contract for modernizing the land-based leg of the nuclear triad; multi-decade revenue locked in through the 2040s'},{icon:'⚠',t:'Revenue growth is at the borderline (exactly ~20% 5Y): NOC growth is slower due to program maturity; watch for B-21 ramp to accelerate revenue in 2027+'},{icon:'✓',t:'Space Systems segment: Golden Dome missile defense initiative (announced 2026) positions Northrop as a primary beneficiary of next-gen space-based interceptors'},{icon:'⚠',t:'Classified programs mix increasing; higher margin but adds earnings predictability risk — a single program write-down (like LMT in 2024) could materially move EPS'}]},
-  {sym:'LDOS',name:'Leidos Holdings',ear:'Q4 FY26 · Mar 4 2026',dod:'~87%',backlog:'$38B',
-   mets:{rev5y:'+33%',rev1y:'+7%',opMgn:'~8.5%',roa:'~6%',ndEbitda:'~2.0x',fcf:'+$1.5B',pe:'~18x'},
-   chks:['Rev 5Y: $12B→$16B (+33%)','Rev 1Y: ~+7% FY2025','Op Margin: ~8.5%','ROA: ~6%','Net Debt/EBITDA: ~2.0x','FCF: ~$1.5B TTM','PE: ~18x'],
-   nextEarnings:'2026-07-08',recentEarnings:'2026-03-04',
-   ins:[{icon:'✓',t:'Operates the largest IT services contract in defense history — Pentagon\'s NGEN network ($7.7B); mission-critical infrastructure is nearly impossible to displace'},{icon:'✓',t:'AI and autonomy integration: ABMS (Advanced Battle Management System) cloud platform for US Air Force and AUKUS submarine surveillance programs'},{icon:'⚠',t:'Op margin at 8.5% is the thinnest pass in this screen — government services contracts have cost-plus structures that limit margin expansion'},{icon:'✓',t:'87% DoD revenue concentration means revenue is extremely defensible — government IT modernization is a multi-decade secular growth driver'},{icon:'✓',t:'Recently reported Q4 FY26 results (Mar 4, 2026) — beat estimates; raised FY2027 guidance; new $3B+ National Security intelligence contract awarded'}]},
+  {sym:'SOFI',name:'SoFi Technologies',ear:'Q4 2025 · Jan 27 2026',
+   mktCap:'~$14.2B',sharePrice:'$13.50',
+   mets:{price:'$13.50',rev5y:'+340%',rev1y:'+26%',ps:'2.8x',gm:'52%',de:'0.26',mc:'$14.2B'},
+   chks:['Shr Price: $13.50 (<$25)','Rev 5Y: +340% (2020: $600M → 2024: $2.66B)','Rev 1Y: +26% FY2024','P/S: 2.8x (<6x)','Gross Margin: 52% (>35%)','D/E: 0.26 (<0.75)','Mkt Cap: $14.2B (in range)'],
+   ins:[{icon:'✓',t:'FY2024 first full-year GAAP profitability — net income $498M; member monetization accelerating across lending, financial services and tech platform'},{icon:'✓',t:'10M+ members growing 35%+ YoY — SoFi bank charter enables competitive savings rates, attracting sticky low-cost deposits that fuel lending margins'},{icon:'⚠',t:'High rate sensitivity — student loan refinancing (20%+ of lending revenue) contracts when rates are elevated; watch Fed rate cycle trajectory'},{icon:'✓',t:'Revenue diversification improving: 42% Financial Services, 40% Lending, 18% Tech Platform (Galileo B2B processing growing independently)'},{icon:'⚠',t:'Share price highly volatile (ranged $4–$17 in 2022–2025) — macro conditions and rate environment can compress multiples significantly'}]},
+  {sym:'HIMS',name:'Hims & Hers Health',ear:'Q4 2025 · Feb 24 2026',
+   mktCap:'~$5.8B',sharePrice:'$22.00',
+   mets:{price:'$22.00',rev5y:'+893%',rev1y:'+69%',ps:'3.9x',gm:'74%',de:'0.10',mc:'$5.8B'},
+   chks:['Shr Price: $22.00 (<$25)','Rev 5Y: +893% (2020: $149M → 2024: $1.48B)','Rev 1Y: +69% FY2024','P/S: 3.9x (<6x)','Gross Margin: 74% (>35%)','D/E: 0.10 (<0.75)','Mkt Cap: $5.8B (in range)'],
+   ins:[{icon:'✓',t:'Revenue +69% YoY with 74% gross margins — telehealth/DTC prescription model creates high-margin recurring revenue across 80+ conditions (hair loss, ED, skincare, weight loss)'},{icon:'⚠',t:'FDA ended semaglutide shortage designation Feb 2025 — compounded GLP-1 weight loss business faces legal uncertainty; Novo Nordisk and Eli Lilly actively challenging compounders'},{icon:'✓',t:'2.2M+ subscribers growing 45% YoY; non-GLP-1 revenue growing 25%+ independently — platform diversification reduces single-drug concentration risk'},{icon:'✓',t:'Asset-light affiliate pharmacy model enables high gross margins and capital-light scaling; strong FCF generation if regulatory headwinds resolve favorably'},{icon:'⚠',t:'Regulatory and legal risk elevated — any court injunction on compounding could materially impact 2026 revenue guidance; closely monitor FDA enforcement activity'}]},
+  {sym:'RELY',name:'Remitly Global',ear:'Q4 2025 · Feb 19 2026',
+   mktCap:'~$3.4B',sharePrice:'$12.00',
+   mets:{price:'$12.00',rev5y:'+540%',rev1y:'+34%',ps:'2.7x',gm:'63%',de:'0.18',mc:'$3.4B'},
+   chks:['Shr Price: $12.00 (<$25)','Rev 5Y: +540% (FY2020: $200M → FY2024: $1.28B)','Rev 1Y: +34% FY2024','P/S: 2.7x (<6x)','Gross Margin: 63% (>35%)','D/E: 0.18 (<0.75)','Mkt Cap: $3.4B (in range)'],
+   ins:[{icon:'✓',t:'International remittance leader — $100B+ annual send volume across 170+ countries with 7M+ active users growing 35%+ YoY; strong network effects'},{icon:'✓',t:'Q4 2024 revenue $1.28B +34% YoY — approaching adj EBITDA profitability; lower cost per transaction at scale drives margin expansion roadmap'},{icon:'✓',t:'$900B global remittance market highly fragmented vs. digital leaders — structural displacement of Western Union/MoneyGram continues with each pricing cycle'},{icon:'⚠',t:'Competition from Wise, Block (CashApp), and PayPal Xoom intensifying — pricing pressure in high-volume corridors (US→Mexico, US→India) compresses take rates'},{icon:'⚠',t:'Not yet GAAP profitable — adj EBITDA positive in H2 2024 but sustained S&M investment required to maintain growth; profitability timeline is a key watch item'}]},
+  {sym:'PATH',name:'UiPath Inc',ear:'Q3 FY26 · Dec 9 2025',
+   mktCap:'~$5.0B',sharePrice:'$13.50',
+   mets:{price:'$13.50',rev5y:'+325%',rev1y:'+19%',ps:'3.5x',gm:'82%',de:'0.05',mc:'$5.0B'},
+   chks:['Shr Price: $13.50 (<$25)','Rev 5Y: +325% (FY2021: $608M → FY2025: $1.43B)','Rev 1Y: +19% FY2025 (year-end Jan 31)','P/S: 3.5x (<6x)','Gross Margin: 82% (>35%)','D/E: 0.05 (<0.75)','Mkt Cap: $5.0B (in range)'],
+   ins:[{icon:'✓',t:'RPA + AI automation leader — UiPath platform automates complex back-office workflows for 10,000+ enterprise clients; net dollar retention above 120%'},{icon:'✓',t:'82% gross margins on software subscriptions — one of the highest-margin enterprise software businesses; ARR ~$1.67B growing 17% YoY'},{icon:'✓',t:'Agentic AI expansion: UiPath Autopilot (RPA bots + LLMs) launched 2025 — positioned as the enterprise "AI execution layer" where decisions become automated actions'},{icon:'⚠',t:'Stock down 65%+ from 2021 highs on multiple compression post-bubble — P/S 3.5x is compelling vs. software peers given 82% margins and 17%+ ARR growth'},{icon:'⚠',t:'Microsoft Power Automate and ServiceNow building competing automation tools — enterprise budget pressure and AI disruption risk to workflow automation market share'}]},
+  {sym:'INDI',name:'indie Semiconductor',ear:'Q4 2025 · Feb 26 2026',
+   mktCap:'~$1.0B',sharePrice:'$6.50',
+   mets:{price:'$6.50',rev5y:'+767%',rev1y:'+25%',ps:'3.8x',gm:'52%',de:'0.22',mc:'$1.0B'},
+   chks:['Shr Price: $6.50 (<$25)','Rev 5Y: +767% (2020: $30M → 2024: $260M)','Rev 1Y: +25% (2024 vs 2023: $208M)','P/S: 3.8x (<6x)','Gross Margin: 52% (>35%)','D/E: 0.22 (<0.75)','Mkt Cap: $1.0B (in range)'],
+   ins:[{icon:'✓',t:'Automotive semiconductor for ADAS, LiDAR signal processing and vehicle connectivity — early design-win leader in the transition to intelligent vehicle edge computing'},{icon:'✓',t:'EV/ADAS semiconductor content per vehicle growing $35→$250+ through 2030 — indie chips inside radar, camera and ultrasonic ADAS systems at Valeo, Aptiv and Mobileye'},{icon:'⚠',t:'Not yet profitable — R&D investment in automotive-grade silicon validation is heavy; typical design-win to volume revenue timeline is 3–5 years in automotive'},{icon:'✓',t:'Customer concentration improved: previously 50%+ single customer, now spread across 8+ Tier 1 automotive suppliers; geographic diversification across NA, Europe and Asia'},{icon:'⚠',t:'EV production slowdown or model transitions at major OEMs could delay volume ramp on existing design wins — automotive cycle risk is a key near-term watch item'}]},
 ];
 
 const MIL_FAIL=[
-  {sym:'LHX', name:'L3Harris Technologies',r5:'✗ ~17%',r1:'✓ +8%',opMgn:'✓ ~9%',  roa:'✓ ~5%',nd:'✓ ~2.5x',fcf:'✓ Pos',pe:'✓ ~20x',f:['Rev 5Y ~17% (misses 20% by 3%)']},
-  {sym:'HII', name:'Huntington Ingalls',   r5:'✓ +36%',r1:'✓ +4%', opMgn:'✗ ~6.5%',roa:'✓ ~5%',nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✓ ~15x',f:['Op Margin ~6.5% (<8%) — shipbuilding compression']},
-  {sym:'HWM', name:'Howmet Aerospace',      r5:'✓ +70%',r1:'✓ +18%',opMgn:'✓ ~20%', roa:'✓ ~10%',nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✗ ~45x',f:['PE ~45x exceeds 30x cap']},
-  {sym:'TDG', name:'TransDigm Group',       r5:'✓ +55%',r1:'✓ +15%',opMgn:'✓ ~45%', roa:'✓ High', nd:'✗ ~5x',  fcf:'✓ Pos',pe:'✗ ~35x',f:['Net Debt/EBITDA ~5x (>3.5x)','PE ~35x']},
-  {sym:'SAIC',name:'Science Applications',  r5:'✓ +22%',r1:'✓ +5%', opMgn:'✗ ~7.5%',roa:'✓ ~5%',nd:'✓ ~2.5x',fcf:'✓ Pos',pe:'✓ ~15x',f:['Op Margin ~7.5% (borderline miss)']},
-  {sym:'BAH', name:'Booz Allen Hamilton',   r5:'✗ ~18%',r1:'✓ +12%',opMgn:'✓ ~10%', roa:'✓ ~12%',nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✓ ~22x',f:['Rev 5Y ~18% (close miss)']},
-  {sym:'BA',  name:'Boeing Defense',        r5:'✗ <10%',r1:'✗ Neg', opMgn:'✗ Neg',  roa:'✗ Neg', nd:'✗ High', fcf:'✗ Neg',pe:'✗ Neg', f:['FCF negative','Op Margin negative','Rev declining']},
-  {sym:'KTOS',name:'Kratos Defense',        r5:'✓ >50%',r1:'✓ +20%',opMgn:'✗ ~4%',  roa:'✗ ~2%', nd:'✓ ~1.5x',fcf:'✓ Pos',pe:'✗ ~100x',f:['Op Margin ~4%','ROA ~2%','PE ~100x']},
-  {sym:'AXON',name:'Axon Enterprise',       r5:'✓ >50%',r1:'✓ +30%',opMgn:'✓ ~18%', roa:'✓ High', nd:'✓ Low',  fcf:'✓ Pos',pe:'✗ ~80x', f:['PE ~80x (growth premium)','<40% DoD revenue']},
-  {sym:'CW',  name:'Curtiss-Wright',        r5:'✓ +27%',r1:'✓ +11%',opMgn:'✓ ~17%', roa:'✓ ~8%', nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✗ ~30x', f:['PE ~30-31x (borderline)']},
-  {sym:'AVAV',name:'AeroVironment',         r5:'✓ >50%',r1:'✓ +25%',opMgn:'✓ ~8%',  roa:'✓ ~5%', nd:'✓ Low',  fcf:'✓ Pos',pe:'✗ ~60x', f:['PE ~60x','Small cap']},
-  {sym:'HEI', name:'HEICO Corporation',     r5:'✓ +55%',r1:'✓ +15%',opMgn:'✓ ~18%', roa:'✓ High', nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✗ ~50x', f:['PE ~50x (quality premium)']},
-  {sym:'MRCY',name:'Mercury Systems',       r5:'✓ +45%',r1:'✗ Neg', opMgn:'✗ ~5%',  roa:'✗ Low', nd:'✓ <3x',  fcf:'✗ Neg',pe:'✗ High', f:['Rev 1Y declining','Op Margin <8%','FCF negative']},
-  {sym:'CACI',name:'CACI International',    r5:'✓ +22%',r1:'✓ +8%', opMgn:'✓ ~8%',  roa:'✓ ~5%', nd:'✓ ~2x',  fcf:'✓ Pos',pe:'✓ ~19x', f:['Borderline — re-evaluate next earnings']},
-  {sym:'DRS', name:'Leonardo DRS',          r5:'— Recent IPO',r1:'✓ +15%',opMgn:'✓ ~8%',roa:'✓ ~5%',nd:'✓ ~2x',fcf:'✓ Pos',pe:'✗ ~35x',f:['PE ~35x','IPO 2023 — insufficient 5Y history']},
+  {sym:'RKLB',name:'Rocket Lab USA',        pr:'✓ $17',  r5:'✓ +615%',   r1:'✓ +78%',      ps:'✗ ~9x',   gm:'✗ ~28%',de:'✓ 0.40',mc:'✓ ~$4B',   f:['P/S ~9x (>6x)','Gross Margin ~28% (<35%)']},
+  {sym:'CELH',name:'Celsius Holdings',      pr:'✗ ~$26', r5:'✓ +900%',   r1:'✗ Declining', ps:'✓ ~3x',   gm:'✓ ~47%',de:'✓ 0.05',mc:'✓ ~$5.5B', f:['Price ~$26 (>$25 threshold)','Rev 1Y declining in 2025']},
+  {sym:'ACMR',name:'ACM Research',          pr:'✓ $16',  r5:'✓ +533%',   r1:'✓ +25%',      ps:'✓ ~1.7x', gm:'✓ ~48%',de:'✓ 0.28',mc:'✓ ~$1.3B', f:['~85% China revenue — US-China export control escalation exceeds quant criteria']},
+  {sym:'DOCN',name:'DigitalOcean',          pr:'✗ ~$28', r5:'✓ +250%',   r1:'✓ +18%',      ps:'✓ ~3.5x', gm:'✓ ~62%',de:'✓ 0.50',mc:'✓ ~$3B',   f:['Price ~$28 (>$25 threshold)']},
+  {sym:'S',   name:'SentinelOne',           pr:'✓ $18',  r5:'✓ +814%',   r1:'✓ +28%',      ps:'✗ ~7x',   gm:'✓ ~80%',de:'✓ 0.05',mc:'✓ ~$5.5B', f:['P/S ~7x (>6x)']},
+  {sym:'ASAN',name:'Asana',                 pr:'✓ $15',  r5:'✓ >80%',    r1:'✗ ~10%',      ps:'✓ ~4x',   gm:'✓ ~90%',de:'✓ 0.12',mc:'✓ ~$3B',   f:['Rev 1Y ~10% (<15%)','Large ongoing operating losses']},
+  {sym:'SMAR',name:'Smartsheet',            pr:'✗ ~$42', r5:'✓ >80%',    r1:'✓ +17%',      ps:'✓ ~5x',   gm:'✓ ~81%',de:'✓ 0.15',mc:'✓ ~$7B',   f:['Price ~$42 (>$25 threshold)']},
+  {sym:'JAMF',name:'Jamf Holding',          pr:'✓ $17',  r5:'✓ +200%',   r1:'✗ ~12%',      ps:'✓ ~3.5x', gm:'✓ ~78%',de:'✓ 0.32',mc:'✓ ~$1.8B', f:['Rev 1Y ~12% (<15%)']},
+  {sym:'ZI',  name:'ZoomInfo Technologies', pr:'✓ $12',  r5:'✓ >80%',    r1:'✗ Declining', ps:'✓ ~3x',   gm:'✓ ~88%',de:'✓ 0.40',mc:'✓ ~$4B',   f:['Rev 1Y declining in 2024-2025']},
+  {sym:'ARRY',name:'Array Technologies',    pr:'✓ $8',   r5:'✓ +350%',   r1:'✗ ~8%',       ps:'✓ ~0.8x', gm:'✗ ~22%',de:'✓ 0.55',mc:'✓ ~$1.5B', f:['Gross Margin ~22% (<35%)','Rev 1Y ~8% (<15%)']},
+  {sym:'TASK',name:'TaskUs',                pr:'✓ $10',  r5:'✓ >80%',    r1:'✗ ~8%',       ps:'✓ ~1.2x', gm:'✗ ~31%',de:'✓ 0.30',mc:'✓ ~$1.0B', f:['Gross Margin ~31% (<35%)','Rev 1Y ~8% (<15%)']},
+  {sym:'CHPT',name:'ChargePoint Holdings',  pr:'✓ $1.50',r5:'✓ +400%',   r1:'✗ Declining', ps:'✓ ~1.5x', gm:'✗ ~20%',de:'✗ High', mc:'✓ ~$700M', f:['Gross Margin ~20% (<35%)','Rev 1Y declining','D/E elevated','Financial difficulties']},
+  {sym:'RXRX',name:'Recursion Pharma',      pr:'✓ $8',   r5:'✓ >80%',    r1:'✓ +30%',      ps:'✗ ~38x',  gm:'✗ ~10%',de:'✓ Low',  mc:'✓ ~$2.5B', f:['P/S ~38x (tiny $65M revenue base)','Early-stage AI drug discovery — not commercial scale']},
+  {sym:'IONQ',name:'IonQ Inc',              pr:'✓ $15',  r5:'✓ >80%',    r1:'✓ +50%',      ps:'✗ ~35x',  gm:'✓ ~40%',de:'✓ Low',  mc:'✓ ~$3.5B', f:['P/S ~35x (pre-scale ~$100M revenue)','Pre-profitability quantum computing']},
+  {sym:'JOBY',name:'Joby Aviation',         pr:'✓ $7',   r5:'— Pre-rev', r1:'— Pre-rev',   ps:'— Pre-rev',gm:'✗ Neg',  de:'✓ Low',  mc:'✓ ~$4B',   f:['Pre-revenue — no commercial flights yet','Negative gross margin in development stage']},
 ];
-
-// ── WEEKLY REVIEW LOGIC ──
-const MIL_REVIEW_KEY='mil-reviewed';
-function milCheckReview(){
-  const bar=$('mil-review-bar'),dot=$('mil-rb-dot'),txt=$('mil-rb-txt'),date=$('mil-rb-date');
-  if(!bar)return;
-  const lastReviewed=localStorage.getItem(MIL_REVIEW_KEY)||null;
-  const now=new Date();
-  // Also check for recent earnings flags
-  const earningsSoon=MIL_PASS.filter(s=>{if(!s.nextEarnings)return false;const d=new Date(s.nextEarnings);return(d-now)/(1000*60*60*24)<=14&&(d-now)>0;});
-  const earningsRecent=MIL_PASS.filter(s=>{if(!s.recentEarnings)return false;const d=new Date(s.recentEarnings);return(now-d)/(1000*60*60*24)<=7;});
-  let daysSince=999;
-  if(lastReviewed){const lr=new Date(lastReviewed);daysSince=(now-lr)/(1000*60*60*24);}
-  if(daysSince>7){
-    dot.className='rb-dot';txt.style.color='var(--mil)';
-    txt.textContent='⚠ Weekly review due — last reviewed: '+(lastReviewed||MIL_REVIEWED_DATE)+' ('+Math.floor(daysSince)+' days ago)';
-    if(date)date.textContent=earningsSoon.length?'Earnings soon: '+earningsSoon.map(s=>s.sym).join(', '):'';
-    bar.style.borderBottomColor='rgba(249,115,22,.4)';
-  } else {
-    dot.className='rb-dot rb-dot-ok';txt.style.color='var(--text)';
-    txt.textContent='Screen up to date · Last reviewed: '+(lastReviewed||MIL_REVIEWED_DATE);
-    bar.classList.add('ok');
-    if(date)date.textContent=earningsSoon.length?'Earnings in next 14 days: '+earningsSoon.map(s=>s.sym).join(', '):'';
-  }
-  // Add badges to cards
-  earningsSoon.forEach(s=>{const c=$('pcc-mil-'+s.sym);if(c){const sym=c.querySelector('.pc-sym');if(sym&&!sym.querySelector('.earnings-badge'))sym.insertAdjacentHTML('beforeend','<span class="earnings-badge eb-soon">Earnings Soon</span>');}});
-  earningsRecent.forEach(s=>{const c=$('pcc-mil-'+s.sym);if(c){const sym=c.querySelector('.pc-sym');if(sym&&!sym.querySelector('.earnings-badge'))sym.insertAdjacentHTML('beforeend','<span class="earnings-badge eb-recent">Recently Reported</span>');}});
-}
-function milMarkReviewed(){
-  const d=new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-  localStorage.setItem(MIL_REVIEW_KEY,d);milCheckReview();
-}
-// Auto-flag: every Friday after 4pm ET, show review reminder
-function scheduleMilReview(){
-  const checkFriday=()=>{const n=getETNow();if(n.getDay()===5&&n.getHours()>=16){milCheckReview();}};
-  setInterval(checkFriday,300000); // check every 5 minutes
-}
 
 // ── POST-MARKET NEWS (stocks only) ──
 function buildPmnPills(){
@@ -857,7 +814,7 @@ async function initDash(){
   $('banner').style.display='none';quotes={};
   buildCards(LRV_PASS,'lrv-pg','lrv');buildCards(BUF_PASS,'buf-pg','buf');buildCards(DIV_PASS,'div-pg','div');buildCards(MIL_PASS,'mil-pg','mil');
   buildFail(LRV_FAIL,'lrv-fb','lrv');buildFail(BUF_FAIL,'buf-fb','buf');buildFail(DIV_FAIL,'div-fb','div');buildFail(MIL_FAIL,'mil-fb','mil');
-  buildPmnPills();loadMkt();loadIdx();await loadQuotes();openWS();schedulePmn();milCheckReview();scheduleMilReview();
+  buildPmnPills();loadMkt();loadIdx();await loadQuotes();openWS();schedulePmn();
 }
 
 // ── DARK / LIGHT MODE ──
